@@ -5,9 +5,9 @@ const carCheckEn = {
   brand: "Brand",
   model: "Model",
   year: "Year",
-  brandPlaceholder: "Choose brand",
-  modelPlaceholder: "Choose model",
-  yearPlaceholder: "Choose year",
+  brandPlaceholder: "Toyota",
+  modelPlaceholder: "Prius",
+  yearPlaceholder: "2016",
   emptyTitle: "Pick your car",
   emptyBody: "Fill in all three fields and the result will appear here.",
   /** {n} and {total} are replaced */

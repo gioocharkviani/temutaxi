@@ -5,12 +5,14 @@ import { useId, useState, type ReactNode } from "react";
 import type { Locale } from "@/i18n/config";
 import type { CarCheckDictionary } from "@/i18n/dictionaries/carcheck-en";
 import { fill } from "@/i18n/fill";
-import { brands, carClasses, classResults, MAX_YEAR, MIN_YEAR, modelsFor, type CarClass } from "@/data/car-classes";
+import { brands, carClasses, classResults, findCar, MAX_YEAR, MIN_YEAR, modelsFor, type CarClass } from "@/data/car-classes";
+import { isValidYear } from "@/lib/registration";
 import { tariffs } from "@/data/tariffs";
 import { site } from "@/config/site";
 import { Icon, type IconName } from "./Icon";
+import { Combobox } from "./register/Combobox";
 
-const years = Array.from({ length: MAX_YEAR - MIN_YEAR + 1 }, (_, i) => MAX_YEAR - i);
+const years = Array.from({ length: MAX_YEAR - MIN_YEAR + 1 }, (_, i) => String(MAX_YEAR - i));
 const iconFor = (c: CarClass): IconName => tariffs.find((t) => t.id === c)?.icon ?? "car";
 
 const resultButton =
@@ -32,10 +34,14 @@ export function CarChecker({
   const [year, setYear] = useState("");
   const id = useId();
 
-  const models = brand ? modelsFor(brand) : [];
-  const car = models.find((m) => m.model === model);
-  const complete = Boolean(car && year);
+  const models = modelsFor(brand);
+  const car = findCar(brand, model);
+  const complete = Boolean(car) && isValidYear(year);
   const results = classResults(car, Number(year));
+  // What was typed cannot lead to any car on the list, so point to the manager instead of waiting.
+  const offList = (options: string[], typed: string) =>
+    Boolean(typed.trim()) && !options.some((o) => o.toLowerCase().includes(typed.trim().toLowerCase()));
+  const notOnList = offList(brands, brand) || (models.length > 0 && offList(models.map((m) => m.model), model));
   const okCount = results.filter((r) => r.ok).length;
 
   const reset = () => {
@@ -47,39 +53,47 @@ export function CarChecker({
   return (
     <div className="grid gap-5 lg:grid-cols-[0.85fr_1.15fr]">
       {/* Form */}
-      <div className="relative overflow-hidden rounded-[32px] bg-dark p-6 text-surface sm:p-8">
-        <div aria-hidden="true" className="absolute -right-24 -top-24 size-64 rounded-full bg-brand/20 blur-3xl" />
+      <div className="relative rounded-[32px] bg-dark p-6 text-surface sm:p-8">
+        {/* Only the glow is clipped: the suggestion lists must be able to leave the panel. */}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden rounded-[32px]">
+          <div className="absolute -right-24 -top-24 size-64 rounded-full bg-brand/20 blur-3xl" />
+        </div>
         <div className="relative space-y-4">
-          <Field step={1} label={t.brand} htmlFor={`${id}-brand`} done={!!brand}>
-            <Select
+          <Field step={1} label={t.brand} htmlFor={`${id}-brand`} done={models.length > 0}>
+            <Combobox
               id={`${id}-brand`}
+              tone="dark"
               value={brand}
+              options={brands}
               placeholder={t.brandPlaceholder}
               onChange={(v) => {
-                setBrand(v);
-                setModel("");
+                // A different brand means the model no longer applies; a case fix keeps it.
+                if (v.trim().toLowerCase() !== brand.trim().toLowerCase()) setModel("");
+                setBrand(v.slice(0, 60));
               }}
-              options={brands.map((b) => ({ value: b, label: b }))}
             />
           </Field>
-          <Field step={2} label={t.model} htmlFor={`${id}-model`} done={!!model}>
-            <Select
+          <Field step={2} label={t.model} htmlFor={`${id}-model`} done={Boolean(car)}>
+            <Combobox
               id={`${id}-model`}
+              tone="dark"
               value={model}
+              options={models.map((m) => m.model)}
               placeholder={t.modelPlaceholder}
-              disabled={!brand}
-              onChange={setModel}
-              options={models.map((m) => ({ value: m.model, label: m.model }))}
+              disabled={models.length === 0}
+              onChange={(v) => setModel(v.slice(0, 60))}
             />
           </Field>
-          <Field step={3} label={t.year} htmlFor={`${id}-year`} done={!!year}>
-            <Select
+          <Field step={3} label={t.year} htmlFor={`${id}-year`} done={complete}>
+            <Combobox
               id={`${id}-year`}
+              tone="dark"
               value={year}
+              options={years}
+              inputMode="numeric"
               placeholder={t.yearPlaceholder}
-              disabled={!model}
-              onChange={setYear}
-              options={years.map((v) => ({ value: String(v), label: String(v) }))}
+              disabled={!car}
+              onChange={(v) => setYear(v.replace(/\D/g, "").slice(0, 4))}
             />
           </Field>
         </div>
@@ -105,8 +119,8 @@ export function CarChecker({
             <span className="flex size-16 items-center justify-center rounded-2xl bg-surface-2 text-faint">
               <Icon name="search" className="size-8" />
             </span>
-            <p className="mt-5 font-display text-xl">{t.emptyTitle}</p>
-            <p className="mt-2 max-w-sm text-muted">{t.emptyBody}</p>
+            <p className="mt-5 font-display text-xl">{notOnList ? t.notFound : t.emptyTitle}</p>
+            <p className="mt-2 max-w-sm text-muted">{notOnList ? t.noneBody : t.emptyBody}</p>
             <div aria-hidden="true" className="mt-6 flex flex-wrap justify-center gap-2">
               {carClasses.map((c) => (
                 <span key={c} className="rounded-full bg-surface-2 px-3 py-1 text-xs font-medium text-faint">
@@ -120,9 +134,9 @@ export function CarChecker({
             <div className="tariff-card-in flex flex-wrap items-end justify-between gap-4">
               <div>
                 <p className="text-sm text-muted">
-                  {brand} · {year}
+                  {car?.brand} · {year}
                 </p>
-                <p className="font-display text-3xl leading-tight tracking-tight">{model}</p>
+                <p className="font-display text-3xl leading-tight tracking-tight">{car?.model}</p>
               </div>
               <span
                 className={`rounded-full px-3.5 py-1.5 text-sm font-semibold ${
@@ -184,7 +198,7 @@ export function CarChecker({
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               {okCount ? (
                 <Link
-                  href={`/${lang}/register?${new URLSearchParams({ brand, model, year })}`}
+                  href={`/${lang}/register?${new URLSearchParams({ brand: car?.brand ?? brand, model: car?.model ?? model, year })}`}
                   className={resultButton}
                 >
                   {t.register}
@@ -243,46 +257,6 @@ function Field({
         {label}
       </label>
       {children}
-    </div>
-  );
-}
-
-function Select({
-  id,
-  value,
-  placeholder,
-  options,
-  onChange,
-  disabled = false,
-}: {
-  id: string;
-  value: string;
-  placeholder: string;
-  options: { value: string; label: string }[];
-  onChange: (v: string) => void;
-  disabled?: boolean;
-}) {
-  return (
-    <div className="relative">
-      <select
-        id={id}
-        value={value}
-        disabled={disabled}
-        onChange={(e) => onChange(e.target.value)}
-        className={`h-14 w-full cursor-pointer appearance-none rounded-2xl border bg-dark-2 pl-4 pr-11 text-base font-medium transition focus:border-brand focus:outline-none disabled:cursor-not-allowed disabled:opacity-40 ${
-          value ? "border-dark-3 text-surface" : "border-dark-3 text-on-dark-muted"
-        } hover:enabled:border-faint`}
-      >
-        <option value="" disabled>
-          {placeholder}
-        </option>
-        {options.map((o) => (
-          <option key={o.value} value={o.value} className="bg-surface text-ink">
-            {o.label}
-          </option>
-        ))}
-      </select>
-      <Icon name="chevronDown" className="pointer-events-none absolute right-4 top-1/2 size-5 -translate-y-1/2 text-on-dark-muted" />
     </div>
   );
 }

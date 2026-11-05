@@ -26,6 +26,7 @@ export function Combobox({
   describedBy,
   inputMode,
   required = false,
+  tone = "light",
 }: {
   id: string;
   value: string;
@@ -38,6 +39,8 @@ export function Combobox({
   describedBy?: string;
   inputMode?: "text" | "numeric";
   required?: boolean;
+  /** "dark" is for inputs on the dark panel; the suggestion list stays light. */
+  tone?: "light" | "dark";
 }) {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
@@ -89,11 +92,11 @@ export function Combobox({
   };
 
   return (
-    <div className="relative">
+    <div className={`relative ${tone === "dark" ? "rounded-2xl bg-dark-2" : ""}`}>
       {ghost && (
         <span aria-hidden="true" className="pointer-events-none absolute inset-0 flex h-14 items-center overflow-hidden whitespace-pre px-4 text-base">
           <span className="invisible">{value}</span>
-          <span className="text-faint">{ghost}</span>
+          <span className={tone === "dark" ? "text-on-dark-muted/70" : "text-faint"}>{ghost}</span>
         </span>
       )}
       <input
@@ -124,15 +127,17 @@ export function Combobox({
         onClick={() => setOpen(true)}
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
-        className={`relative h-14 w-full rounded-2xl border bg-transparent px-4 text-base outline-none transition placeholder:text-faint focus:border-ink disabled:cursor-not-allowed disabled:bg-surface-2 disabled:opacity-60 ${
-          invalid ? "border-danger" : "border-line"
+        className={`relative h-14 w-full rounded-2xl border bg-transparent px-4 text-base outline-none transition placeholder:text-faint disabled:cursor-not-allowed ${
+          tone === "dark"
+            ? "border-dark-3 text-surface hover:enabled:border-faint focus:border-brand disabled:opacity-40"
+            : `focus:border-ink disabled:bg-surface-2 disabled:opacity-60 ${invalid ? "border-danger" : "border-line"}`
         }`}
       />
       <ul
         id={listId}
         role="listbox"
         hidden={!showList}
-        className="absolute inset-x-0 top-full z-30 mt-2 max-h-64 overflow-y-auto rounded-2xl border border-line bg-surface p-1.5 shadow-xl shadow-ink/10"
+        className="absolute inset-x-0 top-full z-30 mt-2 max-h-64 overflow-y-auto rounded-2xl border border-line bg-surface p-1.5 text-ink shadow-xl shadow-ink/10"
       >
         {showList &&
           matches.map((option, i) => {

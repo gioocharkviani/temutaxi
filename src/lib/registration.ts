@@ -43,7 +43,7 @@ export const emptyRegistration: RegistrationValues = {
 
 const MAX_LENGTH = 120;
 
-const isValidYear = (value: string) => /^\d{4}$/.test(value) && Number(value) >= 1950 && Number(value) <= MAX_YEAR;
+export const isValidYear = (value: string) => /^\d{4}$/.test(value) && Number(value) >= 1950 && Number(value) <= MAX_YEAR;
 
 /** Accepts 5XX XX XX XX or +995 5XX XX XX XX, with any spacing. */
 const isValidPhone = (value: string) => /^(\+?995)?5\d{8}$/.test(value.replace(/[\s()-]/g, ""));
