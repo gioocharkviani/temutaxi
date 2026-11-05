@@ -3,14 +3,7 @@ import { defaultLocale, hasLocale, locales, type Locale } from "./i18n/config";
 
 function getLocale(request: NextRequest): Locale {
   const saved = request.cookies.get("NEXT_LOCALE")?.value;
-  if (saved && hasLocale(saved)) return saved;
-
-  const accepted = request.headers.get("accept-language") ?? "";
-  for (const part of accepted.split(",")) {
-    const code = part.split(";")[0].trim().slice(0, 2).toLowerCase();
-    if (hasLocale(code)) return code;
-  }
-  return defaultLocale;
+  return saved && hasLocale(saved) ? saved : defaultLocale;
 }
 
 export function proxy(request: NextRequest) {
