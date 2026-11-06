@@ -23,7 +23,7 @@ const carCheckEn = {
   notFound: "Can’t find your car?",
   reset: "Reset",
   allTariffs: "All tariffs",
-  demoNote: "Demo list — will be updated with official data.",
+  sourceNote: "From the official Yandex Pro list. The final decision is made by Yandex Go.",
 };
 
 export type CarCheckDictionary = typeof carCheckEn;

@@ -1,8 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
-  <rect width="40" height="40" rx="11" fill="#fce000"/>
-  <path d="M10 11.5h20a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-6.5V29a1.5 1.5 0 0 1-1.5 1.5h-4A1.5 1.5 0 0 1 16.5 29V17.5H10A1.5 1.5 0 0 1 8.5 16v-3a1.5 1.5 0 0 1 1.5-1.5Z" fill="#21201f"/>
-  <rect x="11" y="13.5" width="2.5" height="2" fill="#fce000"/>
-  <rect x="16" y="13.5" width="2.5" height="2" fill="#fce000"/>
-  <rect x="21.5" y="13.5" width="2.5" height="2" fill="#fce000"/>
-  <rect x="26.5" y="13.5" width="2.5" height="2" fill="#fce000"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><rect width="48" height="48" fill="#fce000"/><path d="M9 10h30a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H29.5v17a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V20H9a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2Z" fill="#21201f"/></svg>

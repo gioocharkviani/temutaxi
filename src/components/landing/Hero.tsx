@@ -95,7 +95,7 @@ function HeroVisual({ card }: { card: Dictionary["hero"]["card"] }) {
               <Icon name="car" />
             </span>
             <span className="flex size-11 items-center justify-center rounded-xl bg-dark-2 text-brand">
-              <Icon name="package" />
+              <Icon name="star" />
             </span>
           </div>
         </div>

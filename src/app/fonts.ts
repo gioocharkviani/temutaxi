@@ -6,6 +6,9 @@ export const googleSans = Google_Sans({
   subsets: ["georgian", "latin", "latin-ext", "cyrillic"],
   variable: "--font-google-sans",
   display: "swap",
+  // Next.js has no size data for this font; without an explicit fallback it warns on every page.
+  fallback: ["system-ui", "sans-serif"],
+  adjustFontFallback: false,
 });
 
 // Headings: FiraGO, a Georgian-first typeface (also Latin + Cyrillic). OFL licence in src/fonts/firago.

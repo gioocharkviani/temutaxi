@@ -1,22 +1,25 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
-import { hasLocale, locales } from "@/i18n/config";
+import { connection } from "next/server";
+import { Suspense, type ComponentProps } from "react";
+import { hasLocale } from "@/i18n/config";
 import { getDictionary, getRegisterDictionary, getTariffsDictionary } from "@/i18n/dictionaries";
 import { carClasses, type CarClass } from "@/data/car-classes";
-import { Header } from "@/components/Header";
+import { SiteHeader } from "@/components/SiteHeader";
 import { Footer } from "@/components/Footer";
 import { RegisterForm } from "@/components/register/RegisterForm";
+import { getCars } from "@/lib/cars";
+
+/** Reads the car list on the server, so the browser makes no request for it. */
+async function RegisterFormWithCars(props: Omit<ComponentProps<typeof RegisterForm>, "cars">) {
+  await connection();
+  return <RegisterForm {...props} cars={await getCars()} />;
+}
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/register">): Promise<Metadata> {
   const { lang } = await params;
-  if (!hasLocale(lang)) return {};
-  const t = await getRegisterDictionary(lang);
-  return {
-    title: t.meta.title,
-    description: t.meta.description,
-    alternates: { languages: Object.fromEntries(locales.map((l) => [l, `/${l}/register`])) },
-  };
+  return hasLocale(lang) ? pageMetadata(lang, "register") : {};
 }
 
 export default async function RegisterPage({ params }: PageProps<"/[lang]/register">) {
@@ -37,7 +40,7 @@ export default async function RegisterPage({ params }: PageProps<"/[lang]/regist
       >
         {dict.nav.skip}
       </a>
-      <Header lang={lang} nav={dict.nav} />
+      <SiteHeader lang={lang} nav={dict.nav} />
       <main id="main" tabIndex={-1} className="outline-none">
         <div className="mx-auto max-w-7xl px-4 pb-20 pt-8 sm:px-6 lg:px-8 lg:pb-28 lg:pt-12">
           <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-muted">
@@ -49,7 +52,7 @@ export default async function RegisterPage({ params }: PageProps<"/[lang]/regist
           <div className="mt-10">
             {/* The form reads ?brand=&model=&year= from the car checker, so it renders in the browser. */}
             <Suspense fallback={<div className="h-[600px] animate-pulse rounded-[28px] bg-surface-3" />}>
-              <RegisterForm t={t} names={names} lang={lang} />
+              <RegisterFormWithCars t={t} names={names} lang={lang} />
             </Suspense>
           </div>
         </div>

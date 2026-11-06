@@ -1,0 +1,195 @@
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
+import Form from "next/form";
+import { notFound, redirect } from "next/navigation";
+import { connection } from "next/server";
+import { Suspense } from "react";
+import type { RatingSettings } from "@/db/entities";
+import { hasLocale, type Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
+import type { Dictionary } from "@/i18n/dictionaries/en";
+import { fill } from "@/i18n/fill";
+import { Footer } from "@/components/Footer";
+import { SiteHeader } from "@/components/SiteHeader";
+import { formatUpdated, periodLabel } from "@/components/rating/period-label";
+import { RatingList, RatingListSkeleton } from "@/components/rating/RatingList";
+import { RichText } from "@/components/RichText";
+import { getRatingText } from "@/lib/rating/content";
+import { MIN_SEARCH_LENGTH, normalizeName } from "@/lib/rating/ranking";
+import { getPublicTop, getRatingSettings, searchPublicRating } from "@/lib/rating/service";
+
+export async function generateMetadata({ params }: PageProps<"/[lang]/rating">): Promise<Metadata> {
+  const { lang } = await params;
+  return hasLocale(lang) ? pageMetadata(lang, "rating") : {};
+}
+
+export default async function RatingPage({ params, searchParams }: PageProps<"/[lang]/rating">) {
+  const { lang } = await params;
+  if (!hasLocale(lang)) notFound();
+  const dict = await getDictionary(lang);
+
+  return (
+    <>
+      <a
+        href="#main"
+        className="sr-only z-50 rounded-full bg-ink px-4 py-2 text-surface focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+      >
+        {dict.nav.skip}
+      </a>
+      <SiteHeader lang={lang} nav={dict.nav} />
+      <main id="main" tabIndex={-1} className="outline-none">
+        <Suspense fallback={<div className="min-h-[70vh] animate-pulse bg-dark" />}>
+          <RatingContent lang={lang} t={dict.rating} searchParams={searchParams} />
+        </Suspense>
+      </main>
+      <Footer lang={lang} t={dict.footer} nav={dict.nav} />
+    </>
+  );
+}
+
+type SearchParams = PageProps<"/[lang]/rating">["searchParams"];
+
+/** Everything here is read on the server for each request; the browser only receives the finished result. */
+async function RatingContent({ lang, t, searchParams }: { lang: Locale; t: Dictionary["rating"]; searchParams: SearchParams }) {
+  await connection();
+
+  const settings = await getRatingSettings().catch((error) => {
+    console.error("Rating unavailable", error);
+    return null;
+  });
+  // A turned-off rating has no page at all.
+  if (!settings?.enabled) redirect(`/${lang}`);
+
+  const text = getRatingText(settings, lang);
+  const { q } = await searchParams;
+  const query = (typeof q === "string" ? q : "").trim().slice(0, 60);
+
+  return (
+    <>
+      <section className="bg-dark text-surface">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand">{t.label}</p>
+          <h1 className="mt-3 text-4xl font-bold tracking-tight text-balance lg:text-[52px] lg:leading-[1.1]">{text.pageTitle}</h1>
+          <p className="mt-4 max-w-2xl whitespace-pre-line leading-relaxed text-on-dark-muted">{text.landingText}</p>
+          <dl className="mt-8 flex flex-wrap gap-3 text-sm">
+            <div className="rounded-xl bg-dark-2 px-4 py-2.5">
+              <dt className="inline text-on-dark-muted">{t.periodLabel}: </dt>
+              <dd className="inline font-semibold">{periodLabel(settings, t.rollingPeriod, lang)}</dd>
+            </div>
+            <div className="rounded-xl bg-dark-2 px-4 py-2.5">
+              <dt className="inline text-on-dark-muted">{t.minOrdersLabel}: </dt>
+              <dd className="inline font-semibold">{settings.minOrders}</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)] gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)] lg:gap-14 lg:px-8 lg:py-20">
+        <div className="order-2 min-w-0 lg:order-1">
+          <h2 className="mb-6 text-2xl font-bold tracking-tight">{fill(t.topTitle, { n: settings.pageCount })}</h2>
+          <Suspense fallback={<RatingListSkeleton count={Math.min(settings.pageCount, 10)} tone="light" label={t.loading} />}>
+            <TopDrivers settings={settings} t={t} lang={lang} />
+          </Suspense>
+        </div>
+
+        <aside id="search" className="order-1 scroll-mt-24 lg:sticky lg:top-24 lg:order-2 lg:self-start">
+          <div className="rounded-[20px] bg-brand-tint p-5 sm:p-6">
+            <h2 className="text-xl font-bold tracking-tight">{t.searchTitle}</h2>
+            <p className="mt-2 text-sm leading-relaxed text-ink-2">{t.searchLead}</p>
+            <Form action={`/${lang}/rating`} scroll={false} className="mt-4 flex gap-2">
+              <input
+                key={query}
+                name="q"
+                type="search"
+                defaultValue={query}
+                maxLength={60}
+                autoComplete="name"
+                aria-label={t.searchLabel}
+                placeholder={t.searchPlaceholder}
+                className="h-12 min-w-0 flex-1 rounded-2xl border border-line bg-surface px-4 outline-none transition focus:border-ink"
+              />
+              <button type="submit" className="h-12 shrink-0 rounded-2xl bg-ink px-5 font-semibold text-surface transition hover:bg-dark-2">
+                {t.searchButton}
+              </button>
+            </Form>
+            {query && (
+              <div className="mt-4" aria-live="polite">
+                <Suspense key={query} fallback={<RatingListSkeleton count={1} tone="light" label={t.loading} />}>
+                  <SearchResults settings={settings} query={query} t={t} />
+                </Suspense>
+              </div>
+            )}
+          </div>
+        </aside>
+      </section>
+
+      <section aria-labelledby="rules-title" className="border-t border-line bg-surface-2">
+        <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6 lg:py-20">
+          <h2 id="rules-title" className="text-3xl font-bold tracking-tight">{t.rulesTitle}</h2>
+          <div className="mt-8">
+            <RichText text={text.rules} />
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+async function TopDrivers({ settings, t, lang }: { settings: RatingSettings; t: Dictionary["rating"]; lang: Locale }) {
+  const top = await getPublicTop(settings, settings.pageCount).catch((error) => {
+    console.error("Rating could not be read", error);
+    return null;
+  });
+
+  if (!top) return <p className="rounded-2xl border border-line p-6 text-muted">{t.unavailable}</p>;
+  if (top.rows.length === 0) return <p className="rounded-2xl border border-line p-6 text-muted">{t.empty}</p>;
+
+  return (
+    <>
+      <RatingList rows={top.rows} showScores={settings.showScores} ordersLabel={t.orders} tone="light" />
+      <p className="mt-4 text-xs text-muted">{fill(t.updated, { time: formatUpdated(top.syncedAt, lang) })}</p>
+    </>
+  );
+}
+
+async function SearchResults({ settings, query, t }: { settings: RatingSettings; query: string; t: Dictionary["rating"] }) {
+  if (normalizeName(query).replace(/\s/g, "").length < MIN_SEARCH_LENGTH) {
+    return <p className="text-sm font-medium">{fill(t.searchTooShort, { n: MIN_SEARCH_LENGTH })}</p>;
+  }
+
+  const found = await searchPublicRating(settings, query).catch((error) => {
+    console.error("Rating could not be read", error);
+    return null;
+  });
+
+  if (!found) return <p className="text-sm font-medium">{t.unavailable}</p>;
+  if (found.rows.length === 0) return <p className="text-sm font-medium">{t.searchEmpty}</p>;
+
+  return (
+    <>
+      <ul className="space-y-2">
+        {found.rows.map((row, index) => (
+          <li key={`${row.position}-${index}`} className="flex items-center gap-3 rounded-2xl bg-surface p-3.5">
+            <span className="shrink-0 text-center">
+              <strong className="block font-display text-2xl leading-none tabular-nums">{row.position}</strong>
+              <span className="text-[11px] text-muted">{t.place}</span>
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate font-semibold">{row.name}</span>
+              {row.position <= settings.pageCount && (
+                <span className="text-xs text-up">{fill(t.inTop, { n: settings.pageCount })}</span>
+              )}
+            </span>
+            {row.prize !== null && <span className="shrink-0 rounded-full bg-brand-soft px-2.5 py-1 text-xs font-bold">{row.prize} ₾</span>}
+            {settings.showScores && (
+              <span className="shrink-0 text-right">
+                <strong className="font-display text-lg tabular-nums">{row.score}</strong> <span className="text-xs text-muted">{t.orders}</span>
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
+      {found.limited !== null && <p className="mt-3 text-xs text-ink-2">{fill(t.searchMore, { n: found.limited })}</p>}
+    </>
+  );
+}

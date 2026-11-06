@@ -1,14 +1,12 @@
 const tariffsEn = {
   meta: {
-    title: "Yandex Go tariffs in Georgia — TemuTaxi",
-    description:
-      "Economy, Comfort, Comfort+, Minivan, Kids, Delivery and Cargo: compare Yandex Go tariffs and see which one fits your car.",
+    title: "Yandex Go Tariffs and Car List in Georgia — TemuTaxi",
+    description: "Which tariff can your car work in? Economy, Comfort, Comfort+, Electric, Minivan, Business and Child tariffs, from the official Yandex Pro list.",
   },
   label: "Tariffs",
   title: "Yandex Go tariffs",
   lead: "Compare the Yandex Go classes available in Georgia and find out which tariff your car qualifies for.",
-  demoNote: "Demo data: prices and requirements are examples and will be updated with official information.",
-  filters: { all: "All", ride: "Rides", delivery: "Delivery" },
+  sourceNote: "From the official Yandex Pro list. Only cars with 4 or more doors qualify, and age is counted from the date in the registration certificate. The final decision on every car is made by Yandex Go.",
   labels: {
     popular: "Popular",
     from: "Start fare",
@@ -29,6 +27,8 @@ const tariffsEn = {
     register: "Join this tariff",
   },
   models: {
+    // Conditions stated on the official Yandex Pro page.
+    notes: { electro: "Only fully electric cars qualify. Some models are admitted through Yandex support.", business: "Car colour: black or white." },
     label: "Car lists",
     title: "Which cars fit each tariff",
     lead: "Open a category to see the brands and models that qualify, with the minimum production year.",
@@ -83,18 +83,6 @@ const tariffsEn = {
       tagline: "Rides with a child seat",
       cars: "Comfort-class cars with a child seat",
       requirements: ["Certified child seat or booster", "Rating 4.8 or higher", "Careful, smooth driving"],
-    },
-    delivery: {
-      name: "Delivery",
-      tagline: "Parcels and documents across the city",
-      cars: "Passenger car or on foot",
-      requirements: ["Car, bicycle or on foot", "Smartphone with Yandex Pro", "Thermal bag for food orders"],
-    },
-    cargo: {
-      name: "Cargo",
-      tagline: "Furniture, appliances and moving",
-      cars: "Ford Transit, Mercedes-Benz Sprinter, Hyundai Porter",
-      requirements: ["Van or light truck", "Cargo space from 4 m³", "Help with loading on request"],
     },
   },
   cta: {

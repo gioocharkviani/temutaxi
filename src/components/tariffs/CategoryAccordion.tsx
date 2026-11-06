@@ -3,20 +3,25 @@
 import { useId, useState } from "react";
 import type { TariffsDictionary } from "@/i18n/dictionaries/tariffs-en";
 import { fill } from "@/i18n/fill";
-import { carClasses, carModels, type CarClass } from "@/data/car-classes";
+import { carClasses, type CarClass, type CarModel } from "@/data/car-classes";
 import { tariffs } from "@/data/tariffs";
 import { Icon } from "../Icon";
 
 const iconFor = (c: CarClass) => tariffs.find((t) => t.id === c)?.icon ?? "car";
 
-const rowsFor = (c: CarClass) =>
-  carModels
-    .filter((m) => m.years[c] !== undefined)
-    .map((m) => ({ name: `${m.brand} ${m.model}`, from: m.years[c]! }))
+const rowsFor = (cars: CarModel[], c: CarClass) =>
+  cars
+    .filter((m) => typeof m.years[c] === "number")
+    .map((m) => ({ name: `${m.brand} ${m.model}`, from: m.years[c] as number }))
     .sort((a, b) => a.name.localeCompare(b.name));
 
 // Mirrors the Yandex Pro layout: one row per category that expands into its car list.
-export function CategoryAccordion({ t }: { t: TariffsDictionary }) {
+export type AccordionText = {
+  models: TariffsDictionary["models"];
+  items: Record<CarClass, { name: string; tagline: string }>;
+};
+
+export function CategoryAccordion({ t, cars }: { t: AccordionText; cars: CarModel[] }) {
   const [open, setOpen] = useState<CarClass | null>("economy");
   const [query, setQuery] = useState("");
   const baseId = useId();
@@ -31,9 +36,10 @@ export function CategoryAccordion({ t }: { t: TariffsDictionary }) {
     <div className="overflow-hidden rounded-[28px] border border-line bg-surface">
       {carClasses.map((c, i) => {
         const isOpen = open === c;
-        const all = rowsFor(c);
+        const all = rowsFor(cars, c);
         const q = query.trim().toLowerCase();
-        const rows = isOpen && q ? all.filter((r) => r.name.toLowerCase().includes(q)) : all;
+        // Lists can hold over a thousand rows, so only the open category goes on the page.
+        const rows = !isOpen ? [] : q ? all.filter((r) => r.name.toLowerCase().includes(q)) : all;
         const btnId = `${baseId}-${c}-btn`;
         const panelId = `${baseId}-${c}-panel`;
         const copy = t.items[c];
@@ -91,14 +97,7 @@ export function CategoryAccordion({ t }: { t: TariffsDictionary }) {
                   }`}
                 >
                   <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                    <ul className="flex flex-wrap gap-2">
-                      {copy.requirements.map((r) => (
-                        <li key={r} className="inline-flex items-center gap-1.5 rounded-full bg-surface-2 px-3 py-1.5 text-xs font-medium text-ink-2">
-                          <Icon name="check" className="size-3 text-up" strokeWidth={3} />
-                          {r}
-                        </li>
-                      ))}
-                    </ul>
+                    <p className="text-sm font-medium text-ink-2">{(m.notes as Partial<Record<CarClass, string>>)[c]}</p>
                     <label className="relative block md:w-72">
                       <span className="sr-only">{m.search}</span>
                       <Icon name="search" className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-faint" />

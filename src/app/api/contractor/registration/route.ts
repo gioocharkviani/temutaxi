@@ -1,41 +1,49 @@
-import {
-  parseRegistration,
-  toPayload,
-  validateRegistration,
-} from "@/lib/registration";
+import { getCars } from "@/lib/cars";
+import { createDriverProfile } from "@/lib/fleet";
+import { effectiveTariff, getTariffState } from "@/lib/registration";
+import { parseRegistration, validateRegistration } from "@/lib/registration-schema";
+import { markRegistrationFailed, markRegistrationSent, saveRegistration } from "@/lib/registrations";
+
+/** The API accepts 16-64 printable ASCII characters. */
+const VALID_TOKEN = /^[\x20-\x7e]{16,64}$/;
+
+const STATUS = {
+  "not-configured": 503,
+  rejected: 502,
+  unreachable: 502,
+} as const;
 
 export async function POST(request: Request) {
+  // 1. Is this the right shape of data?
   const body: unknown = await request.json().catch(() => null);
   const values = parseRegistration(body);
   if (!values) return Response.json({ error: "invalid" }, { status: 400 });
 
-  const errors = validateRegistration(values);
-  if (Object.keys(errors).length > 0)
+  // 2. Does it follow the rules? Tariffs are checked against the car list in the database.
+  const cars = await getCars();
+  const errors = validateRegistration(values, cars);
+  if (Object.keys(errors).length > 0) {
     return Response.json({ error: "invalid", errors }, { status: 422 });
-
-  const webhook = process.env.REGISTRATION_WEBHOOK_URL;
-  if (!webhook) {
-    if (process.env.NODE_ENV === "production")
-      return Response.json({ error: "not-configured" }, { status: 503 });
-    return Response.json({ ok: true, demo: true });
   }
 
+  // 3. Save it. The form keeps one id across retries, so a repeat cannot create a second driver.
   const requestId = (body as { requestId?: unknown }).requestId;
-  const response = await fetch(webhook, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(
-      toPayload(
-        values,
-        typeof requestId === "string"
-          ? requestId.slice(0, 64)
-          : crypto.randomUUID(),
-      ),
-    ),
-    signal: AbortSignal.timeout(10_000),
-  }).catch(() => null);
+  const token = typeof requestId === "string" && VALID_TOKEN.test(requestId) ? requestId : crypto.randomUUID();
+  const tariff = effectiveTariff(values, getTariffState(values, cars));
 
-  if (!response?.ok)
-    return Response.json({ error: "delivery-failed" }, { status: 502 });
+  const saved = await saveRegistration(values, tariff, token).catch((error) => {
+    console.error("Registration could not be saved", error);
+    return null;
+  });
+  if (!saved) return Response.json({ error: "not-saved" }, { status: 503 });
+  if (saved.alreadySent) return Response.json({ ok: true });
+
+  // 4. Create the driver in Yandex.
+  const result = await createDriverProfile(values, tariff, token);
+  if (!result.ok) {
+    await markRegistrationFailed(saved.id, result.detail ?? result.reason);
+    return Response.json({ error: result.reason }, { status: STATUS[result.reason] });
+  }
+  await markRegistrationSent(saved.id, result.id);
   return Response.json({ ok: true });
 }

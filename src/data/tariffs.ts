@@ -10,25 +10,16 @@ export type TariffId =
   | "electro"
   | "minivan"
   | "business"
-  | "kids"
-  | "delivery"
-  | "cargo";
-export type TariffCategory = "ride" | "delivery";
+  | "kids";
 
 export type Tariff = {
   id: TariffId;
-  category: TariffCategory;
   icon: IconName;
   popular?: boolean;
-  /** GEL */
   start: number;
-  /** GEL per km */
   perKm: number;
-  /** GEL per minute of the trip */
   perMin: number;
-  /** minutes of free waiting */
   freeWait: number;
-  /** GEL per minute of paid waiting */
   paidWait: number;
   seats?: number;
   minYear?: number;
@@ -37,7 +28,6 @@ export type Tariff = {
 export const tariffs: Tariff[] = [
   {
     id: "economy",
-    category: "ride",
     icon: "car",
     popular: true,
     start: 2.0,
@@ -50,7 +40,6 @@ export const tariffs: Tariff[] = [
   },
   {
     id: "comfort",
-    category: "ride",
     icon: "star",
     start: 2.6,
     perKm: 1.1,
@@ -62,7 +51,6 @@ export const tariffs: Tariff[] = [
   },
   {
     id: "comfortPlus",
-    category: "ride",
     icon: "sparkles",
     start: 3.5,
     perKm: 1.4,
@@ -74,7 +62,6 @@ export const tariffs: Tariff[] = [
   },
   {
     id: "electro",
-    category: "ride",
     icon: "zap",
     start: 2.8,
     perKm: 1.2,
@@ -86,7 +73,6 @@ export const tariffs: Tariff[] = [
   },
   {
     id: "minivan",
-    category: "ride",
     icon: "users",
     start: 3.2,
     perKm: 1.3,
@@ -98,7 +84,6 @@ export const tariffs: Tariff[] = [
   },
   {
     id: "business",
-    category: "ride",
     icon: "briefcase",
     start: 5.0,
     perKm: 2.0,
@@ -110,7 +95,6 @@ export const tariffs: Tariff[] = [
   },
   {
     id: "kids",
-    category: "ride",
     icon: "baby",
     start: 2.6,
     perKm: 1.1,
@@ -119,26 +103,6 @@ export const tariffs: Tariff[] = [
     paidWait: 0.15,
     seats: 4,
     minYear: 2014,
-  },
-  {
-    id: "delivery",
-    category: "delivery",
-    icon: "package",
-    start: 2.6,
-    perKm: 0.9,
-    perMin: 0.15,
-    freeWait: 6,
-    paidWait: 0.1,
-  },
-  {
-    id: "cargo",
-    category: "delivery",
-    icon: "truck",
-    start: 15.0,
-    perKm: 2.5,
-    perMin: 0.35,
-    freeWait: 10,
-    paidWait: 0.35,
   },
 ];
 

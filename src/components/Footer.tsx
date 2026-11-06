@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import { site } from "@/config/site";
@@ -25,6 +26,9 @@ export function Footer({ lang, t, nav }: { lang: Locale; t: Dictionary["footer"]
             <br />
             {site.company.address}
           </address>
+          <Link href={`/${lang}/privacy`} className="mt-4 inline-block text-sm text-on-dark-muted underline underline-offset-4 transition hover:text-brand">
+            {t.policy}
+          </Link>
         </div>
 
         <nav aria-label={t.navTitle}>

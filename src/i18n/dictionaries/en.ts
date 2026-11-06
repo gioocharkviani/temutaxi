@@ -1,8 +1,7 @@
 const en = {
   meta: {
-    title: "TemuTaxi — Official Yandex Partner in Georgia",
-    description:
-      "Driver and courier registration in Yandex Taxi, Yandex Go, Yandex Delivery and Yandex Pro in Tbilisi, Batumi and across Georgia.",
+    title: "Register as a Yandex Taxi Driver in Georgia Online — TemuTaxi",
+    description: "Register online as a taxi driver with Yandex Taxi, Yandex Go and Yandex Pro in Tbilisi, Batumi and across Georgia. Check your car and tariff.",
   },
   nav: {
     skip: "Skip to content",
@@ -13,15 +12,16 @@ const en = {
     contact: "Contact",
     register: "Register",
     tariffs: "Tariffs",
+    rating: "Rating",
     menu: "Open menu",
     close: "Close menu",
     language: "Language",
   },
   hero: {
     badge: "Official Yandex partner in Georgia",
-    title: "Drive or deliver with Yandex.",
+    title: "Drive with Yandex.",
     titleAccent: "Start online today.",
-    lead: "Fast online registration for drivers and couriers in Yandex Taxi, Yandex Go, Yandex Delivery and Yandex Pro — in Tbilisi, Batumi and across Georgia.",
+    lead: "Fast online registration for taxi drivers in Yandex Taxi, Yandex Go and Yandex Pro — in Tbilisi, Batumi and across Georgia.",
     primary: "Start registration",
     secondary: "Talk to a manager",
     stats: [
@@ -39,20 +39,13 @@ const en = {
   services: { label: "Registration in" },
   roles: {
     label: "Who it’s for",
-    title: "Choose how you want to work",
+    title: "Become a taxi driver with an official partner",
     drivers: {
       tag: "For drivers",
       title: "Drive with Yandex Taxi & Yandex Go",
       body: "Submit your application online, complete verification and get support from our team.",
       points: ["Yandex Taxi, Yandex Go, Yandex Pro", "Tbilisi, Batumi and all of Georgia", "Smooth process with an official partner"],
       cta: "Register as driver",
-    },
-    couriers: {
-      tag: "For couriers",
-      title: "Deliver with Yandex Delivery",
-      body: "A flexible schedule, a simple start and online registration with an official partner.",
-      points: ["Yandex Delivery, Yandex Pro", "Flexible working hours", "Register in just a few steps"],
-      cta: "Register as courier",
     },
   },
   benefits: {
@@ -66,6 +59,33 @@ const en = {
       { title: "Bonuses & promos", body: "Get up-to-date information about bonuses and special offers." },
       { title: "Official partner", body: "Work with an official Yandex partner you can rely on." },
     ],
+  },
+  rating: {
+    label: "Driver rating",
+    periodLabel: "Period",
+    rollingPeriod: "Last {days} days",
+    minOrdersLabel: "Minimum orders",
+    updated: "Updated: {time}",
+    orders: "orders",
+    cta: "Join the park",
+    details: "Full rating and conditions",
+    unavailable: "The rating is temporarily unavailable. Please try again shortly.",
+    empty: "There are no results for this period yet.",
+    loading: "Loading the rating",
+    metaTitle: "Taxi Driver Rating and Conditions — TemuTaxi",
+    metaDescription: "The park's top drivers, the full rating rules, and a search to find your own place.",
+    topTitle: "Top {n}",
+    searchTitle: "Find your place",
+    searchLead: "Not in the top? Enter your name or surname to see your place.",
+    searchLabel: "Name or surname",
+    searchPlaceholder: "Name or surname",
+    searchButton: "Search",
+    searchTooShort: "Enter at least {n} letters.",
+    searchEmpty: "No driver with this name was found in the current period.",
+    searchMore: "Showing the first {n} matches. Enter your full name to narrow them down.",
+    place: "place",
+    inTop: "In the top {n}",
+    rulesTitle: "Rules and conditions",
   },
   steps: {
     label: "How it works",
@@ -81,7 +101,7 @@ const en = {
   bonuses: {
     label: "Bonuses",
     title: "Bonuses and special offers",
-    body: "TemuTaxi regularly shares bonuses, promotions and special offers with drivers and couriers. After registration our team will keep you up to date.",
+    body: "TemuTaxi regularly shares bonuses, promotions and special offers with drivers. After registration our team will keep you up to date.",
     cta: "Ask about bonuses",
   },
   faq: {
@@ -90,9 +110,11 @@ const en = {
     items: [
       { q: "How long does registration take?", a: "If all information is filled in correctly, registration is usually completed quickly." },
       { q: "Can I register from my phone?", a: "Yes, you can submit your application from your phone, tablet or computer." },
-      { q: "Is TemuTaxi an official Yandex partner?", a: "Yes, TemuTaxi is an official Yandex partner in Georgia and helps drivers and couriers complete registration." },
+      { q: "Is TemuTaxi an official Yandex partner?", a: "Yes, TemuTaxi is an official Yandex partner in Georgia and helps drivers complete registration." },
       { q: "Is registration available only in Batumi?", a: "No. Registration is available in Tbilisi, Batumi and across Georgia." },
-      { q: "Can I register in Yandex Delivery and Yandex Pro?", a: "Yes, TemuTaxi helps with registration in Yandex Delivery and Yandex Pro, as well as Yandex Taxi and Yandex Go." },
+      { q: "Can I register in Yandex Pro?", a: "Yes, TemuTaxi helps with registration in Yandex Pro, as well as Yandex Taxi and Yandex Go." },
+      { q: "Can a taxi drive in the bus lane?", a: "In Tbilisi, it depends on the taxi's permit category. A Category A taxi can pick up and drop off passengers in the bus lane, and under a 2023 City Hall decision, a Category A car under 10 years old with a sticker can also drive in it. A Category B taxi does not have this right. Registering with Yandex or TemuTaxi does not give bus lane rights. Check the current conditions with Tbilisi City Hall: taxi.tbilisi.gov.ge." },
+      { q: "What is the fine for driving in a bus lane without the right?", a: "According to information published from 1 May 2026: driving in a bus lane is 100 GEL and 15 points, or 150 GEL and 30 points for a repeat. Driving, stopping or parking in an oncoming bus lane is 200 GEL and 20 points, or 300 GEL and 30 points for a repeat. Amounts can change, so check official sources." },
     ],
   },
   contact: {
@@ -105,11 +127,11 @@ const en = {
   },
   cta: {
     title: "Start working with TemuTaxi",
-    body: "Submit your application now — fast registration in Yandex Taxi, Yandex Go, Yandex Delivery and Yandex Pro.",
+    body: "Submit your application now — fast registration in Yandex Taxi, Yandex Go and Yandex Pro.",
     button: "Register now",
   },
   footer: {
-    tagline: "Official Yandex partner in Georgia for driver and courier registration.",
+    tagline: "Official Yandex partner in Georgia for taxi driver registration.",
     disclaimer: "This website is operated by Company LLC and is not the official website of Yandex Go.",
     policy: "Privacy policy & terms",
     rights: "All rights reserved.",

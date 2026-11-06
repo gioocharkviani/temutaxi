@@ -1,75 +1,30 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import type { Locale } from "@/i18n/config";
 import type { TariffsDictionary } from "@/i18n/dictionaries/tariffs-en";
-import { formatGel, tariffs, type Tariff, type TariffCategory } from "@/data/tariffs";
+import { formatGel, tariffs, type Tariff } from "@/data/tariffs";
 import { site } from "@/config/site";
 import { Icon } from "../Icon";
 
-type Filter = "all" | TariffCategory;
-const filters: Filter[] = ["all", "ride", "delivery"];
 // The help card fills whatever is left of the last row in the 3-column (xl) grid.
 const helpSpan: Record<number, string> = { 1: "", 2: "xl:col-span-2", 3: "md:col-span-2 xl:col-span-3" };
 
 export function TariffExplorer({ t, lang }: { t: TariffsDictionary; lang: Locale }) {
-  const [filter, setFilter] = useState<Filter>("all");
-  const visible = tariffs.filter((x) => filter === "all" || x.category === filter);
-  const active = filters.indexOf(filter);
-
   return (
-    <div>
-      {/* Segmented filter with a sliding indicator */}
-      <div role="tablist" aria-label={t.label} className="relative inline-grid grid-cols-3 rounded-full border border-line bg-surface p-1">
-        <span
-          aria-hidden="true"
-          className="absolute inset-y-1 left-1 w-[calc((100%-0.5rem)/3)] rounded-full bg-ink transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
-          style={{ transform: `translateX(${active * 100}%)` }}
-        />
-        {filters.map((f) => {
-          const count = f === "all" ? tariffs.length : tariffs.filter((x) => x.category === f).length;
-          const selected = f === filter;
-          return (
-            <button
-              key={f}
-              type="button"
-              role="tab"
-              aria-selected={selected}
-              onClick={() => setFilter(f)}
-              className={`relative z-10 flex h-10 items-center justify-center gap-2 rounded-full px-4 text-sm font-semibold transition-colors duration-300 sm:px-6 ${
-                selected ? "text-surface" : "text-ink-2 hover:text-ink"
-              }`}
-            >
-              {t.filters[f]}
-              <span
-                className={`rounded-full px-1.5 text-xs tabular-nums transition-colors duration-300 ${
-                  selected ? "bg-brand text-ink" : "bg-surface-2 text-faint"
-                }`}
-              >
-                {count}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
-      <ul key={filter} className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {visible.map((tariff, i) => (
-          <li key={tariff.id} className="tariff-card-in" style={{ animationDelay: `${i * 70}ms` }}>
-            <TariffCard tariff={tariff} t={t} lang={lang} />
-          </li>
-        ))}
-        {filter === "all" && (
-          <li
-            className={`tariff-card-in ${helpSpan[3 - (visible.length % 3)]}`}
-            style={{ animationDelay: `${visible.length * 70}ms` }}
-          >
-            <HelpCard t={t} />
-          </li>
-        )}
-      </ul>
-    </div>
+    <ul className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+      {tariffs.map((tariff, i) => (
+        <li key={tariff.id} className="tariff-card-in" style={{ animationDelay: `${i * 70}ms` }}>
+          <TariffCard tariff={tariff} t={t} lang={lang} />
+        </li>
+      ))}
+      <li
+        className={`tariff-card-in ${helpSpan[3 - (tariffs.length % 3)]}`}
+        style={{ animationDelay: `${tariffs.length * 70}ms` }}
+      >
+        <HelpCard t={t} />
+      </li>
+    </ul>
   );
 }
 

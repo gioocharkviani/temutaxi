@@ -13,7 +13,7 @@ import { Logo } from "./Logo";
 // Delay (ms) between each menu item appearing.
 const STAGGER = 45;
 
-export function Header({ lang, nav }: { lang: Locale; nav: Dictionary["nav"] }) {
+export function Header({ lang, nav, showRating }: { lang: Locale; nav: Dictionary["nav"]; showRating: boolean }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
@@ -40,15 +40,11 @@ export function Header({ lang, nav }: { lang: Locale; nav: Dictionary["nav"] }) 
     };
   }, [open]);
 
-  // Section links point at the home page so they also work from other pages.
   const links = [
-    { href: `/${lang}#roles`, label: nav.roles },
-    { href: `/${lang}#benefits`, label: nav.benefits },
-    { href: `/${lang}#steps`, label: nav.steps },
-    { href: `/${lang}#faq`, label: nav.faq },
-    { href: `/${lang}#contact`, label: nav.contact },
+    { href: `/${lang}/tariffs`, label: nav.tariffs },
+    ...(showRating ? [{ href: `/${lang}/rating`, label: nav.rating }] : []),
   ];
-  const isActive = (href: string) => !href.includes("#") && pathname === href;
+  const isActive = (href: string) => pathname === href;
 
   // Shared classes for items that fade/slide in one after another.
   const item = `transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${

@@ -22,7 +22,7 @@ export function Logo({ lang, inverted = false }: { lang: Locale; inverted?: bool
       <LogoMark />
       <span className={`font-display text-lg font-bold tracking-tight ${inverted ? "text-surface" : "text-ink"}`}>
         temu<span className={inverted ? "text-brand" : ""}>taxi</span>
-        <span className={inverted ? "text-on-dark-muted" : "text-faint"}>.com</span>
+        <span className={inverted ? "text-on-dark-muted" : "text-faint"}>.ge</span>
       </span>
     </Link>
   );

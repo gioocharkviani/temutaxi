@@ -1,11 +1,14 @@
 import type { Locale } from "@/i18n/config";
 import type { CarCheckDictionary } from "@/i18n/dictionaries/carcheck-en";
 import type { TariffsDictionary } from "@/i18n/dictionaries/tariffs-en";
+import { connection } from "next/server";
 import { carClasses, type CarClass } from "@/data/car-classes";
+import { getCars } from "@/lib/cars";
 import { CarChecker } from "../CarChecker";
 import { SectionHead } from "./SectionHead";
 
-export function CarCheck({
+/** Read from the database on the server. Renders nothing until the car list has been downloaded. */
+export async function CarCheck({
   t,
   tariffItems,
   lang,
@@ -16,6 +19,10 @@ export function CarCheck({
   lang: Locale;
   showTariffsLink?: boolean;
 }) {
+  await connection();
+  const cars = await getCars();
+  if (cars.length === 0) return null;
+
   const names = Object.fromEntries(carClasses.map((c) => [c, tariffItems[c].name])) as Record<CarClass, string>;
 
   return (
@@ -25,7 +32,7 @@ export function CarCheck({
         <p className="max-w-md text-muted">{t.lead}</p>
       </div>
       <div className="mt-10">
-        <CarChecker t={t} names={names} lang={lang} showTariffsLink={showTariffsLink} />
+        <CarChecker t={t} names={names} lang={lang} showTariffsLink={showTariffsLink} cars={cars} />
       </div>
     </section>
   );

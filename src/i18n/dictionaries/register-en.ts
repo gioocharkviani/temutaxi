@@ -1,15 +1,14 @@
 const registerEn = {
   meta: {
-    title: "Taxi driver registration — TemuTaxi",
-    description: "Register as a Yandex Go taxi driver in Georgia: enter your details and car, and choose a tariff that fits it.",
+    title: "Taxi Driver Registration Online in Georgia — TemuTaxi",
+    description: "Fill in the taxi driver application online: personal details, driving licence, car and tariff. Start driving with Yandex Go in Georgia.",
   },
   badge: "Taxi registration",
   title: "Register as a taxi driver",
   lead: "Fill in the form and our manager will contact you. No photos are needed at this stage.",
-  optional: "Optional",
   sections: {
     personal: { title: "Your details", hint: "So that we can contact you." },
-    licence: { title: "Driving licence", hint: "You can also give us these details later." },
+    licence: { title: "Driving licence", hint: "We need these to create your driver profile." },
     car: { title: "Your car", hint: "Start typing and choose from the suggestions. These details unlock the tariffs." },
     tariff: { title: "Tariff", hint: "Only tariffs that fit your car can be selected." },
   },
@@ -58,6 +57,7 @@ const registerEn = {
   },
   errors: {
     required: "Please fill in this field.",
+    fullName: "Enter both your first name and last name.",
     phone: "Check the phone number, for example 5XX XX XX XX or +995 5XX XX XX XX.",
     date: "Enter a real date as DD.MM.YYYY.",
     expiryOrder: "The expiry date must be after the date of issue.",
@@ -68,6 +68,7 @@ const registerEn = {
     consent: "Please confirm your consent to continue.",
   },
   consent: "I agree to the processing of my personal data for this registration.",
+  consentLink: "Read the privacy policy",
   submit: "Send registration",
   sending: "Sending…",
   sendError: "Your registration could not be sent. Check your connection and try again, or message our manager.",

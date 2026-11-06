@@ -1,12 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useId, useState, type ReactNode } from "react";
+import { useId, useMemo, useState, type ReactNode } from "react";
 import type { Locale } from "@/i18n/config";
 import type { CarCheckDictionary } from "@/i18n/dictionaries/carcheck-en";
 import { fill } from "@/i18n/fill";
-import { brands, carClasses, classResults, findCar, MAX_YEAR, MIN_YEAR, modelsFor, type CarClass } from "@/data/car-classes";
-import { isValidYear } from "@/lib/registration";
+import { brandsOf, carClasses, classResults, findCar, isValidYear, MAX_YEAR, MIN_YEAR, modelsFor, type CarClass, type CarModel } from "@/data/car-classes";
 import { tariffs } from "@/data/tariffs";
 import { site } from "@/config/site";
 import { Icon, type IconName } from "./Icon";
@@ -23,19 +22,23 @@ export function CarChecker({
   names,
   lang,
   showTariffsLink = false,
+  cars,
 }: {
   t: CarCheckDictionary;
   names: Record<CarClass, string>;
   lang: Locale;
   showTariffsLink?: boolean;
+  /** Read from the database on the server and delivered with the page. */
+  cars: CarModel[];
 }) {
   const [brand, setBrand] = useState("");
   const [model, setModel] = useState("");
   const [year, setYear] = useState("");
   const id = useId();
 
-  const models = modelsFor(brand);
-  const car = findCar(brand, model);
+  const brands = useMemo(() => brandsOf(cars), [cars]);
+  const models = modelsFor(cars, brand);
+  const car = findCar(cars, brand, model);
   const complete = Boolean(car) && isValidYear(year);
   const results = classResults(car, Number(year));
   // What was typed cannot lead to any car on the list, so point to the manager instead of waiting.
@@ -224,7 +227,7 @@ export function CarChecker({
         )}
         <p className="mt-5 flex items-center gap-2 text-xs text-faint">
           <Icon name="info" className="size-3.5 shrink-0" />
-          {t.demoNote}
+          {t.sourceNote}
         </p>
       </div>
     </div>

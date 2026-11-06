@@ -23,7 +23,7 @@ const carCheckRu: CarCheckDictionary = {
   notFound: "Не нашли свой автомобиль?",
   reset: "Сбросить",
   allTariffs: "Все тарифы",
-  demoNote: "Демо-список — будет обновлён по официальным данным.",
+  sourceNote: "Данные из официального списка Yandex Pro. Окончательное решение принимает Yandex Go.",
 };
 
 export default carCheckRu;

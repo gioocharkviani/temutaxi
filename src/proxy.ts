@@ -1,8 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { defaultLocale, hasLocale, locales, type Locale } from "./i18n/config";
+import { defaultLocale, hasLocale, LOCALE_COOKIE, locales, type Locale } from "./i18n/config";
 
 function getLocale(request: NextRequest): Locale {
-  const saved = request.cookies.get("NEXT_LOCALE")?.value;
+  const saved = request.cookies.get(LOCALE_COOKIE)?.value;
   return saved && hasLocale(saved) ? saved : defaultLocale;
 }
 
@@ -18,5 +18,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next|api|fonts|favicon.ico|.*\\..*).*)"],
+  matcher: ["/((?!_next|api|admin|fonts|favicon.ico|.*\\..*).*)"],
 };

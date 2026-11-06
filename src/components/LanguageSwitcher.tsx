@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { localeLabels, locales, type Locale } from "@/i18n/config";
+import { LOCALE_COOKIE, localeLabels, locales, type Locale } from "@/i18n/config";
 import { Icon } from "./Icon";
 
 function swapLocale(pathname: string, next: Locale) {
@@ -13,7 +13,7 @@ function swapLocale(pathname: string, next: Locale) {
 }
 
 function remember(locale: Locale) {
-  document.cookie = `NEXT_LOCALE=${locale}; path=/; max-age=31536000; samesite=lax`;
+  document.cookie = `${LOCALE_COOKIE}=${locale}; path=/; max-age=31536000; samesite=lax`;
 }
 
 export function LanguageSwitcher({ lang, label }: { lang: Locale; label: string }) {

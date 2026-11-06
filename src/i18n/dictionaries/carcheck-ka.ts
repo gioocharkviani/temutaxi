@@ -23,7 +23,7 @@ const carCheckKa: CarCheckDictionary = {
   notFound: "ვერ იპოვეთ თქვენი მანქანა?",
   reset: "გასუფთავება",
   allTariffs: "ყველა ტარიფი",
-  demoNote: "სადემონსტრაციო სია — განახლდება ოფიციალური მონაცემებით.",
+  sourceNote: "მონაცემები Yandex Pro-ს ოფიციალური სიიდანაა. საბოლოო გადაწყვეტილებას იღებს Yandex Go.",
 };
 
 export default carCheckKa;
