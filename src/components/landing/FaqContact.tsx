@@ -12,7 +12,7 @@ export function FaqContact({ faq, contact }: { faq: Dictionary["faq"]; contact: 
   ];
 
   return (
-    <section className="mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.3fr_1fr] lg:gap-16 lg:px-8 lg:py-28">
+    <section className="mx-auto grid max-w-site gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.3fr_1fr] lg:gap-16 lg:px-8 lg:py-28">
       <div id="faq" aria-labelledby="faq-title" role="region">
         <SectionHead id="faq-title" label={faq.label} title={faq.title} />
         <div className="mt-10">

@@ -4,7 +4,7 @@ import { Icon } from "../Icon";
 
 export function Bonuses({ t }: { t: Dictionary["bonuses"] }) {
   return (
-    <section aria-labelledby="bonuses-title" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section aria-labelledby="bonuses-title" className="mx-auto max-w-site px-4 sm:px-6 lg:px-8">
       <div className="relative grid items-center gap-8 overflow-hidden rounded-[32px] bg-brand p-7 sm:p-10 lg:grid-cols-[auto_1fr_auto] lg:gap-10 lg:p-12">
         <div aria-hidden="true" className="absolute -bottom-24 -right-24 size-72 rounded-full bg-brand-hover" />
         <span className="relative flex size-16 items-center justify-center rounded-2xl bg-ink text-brand">

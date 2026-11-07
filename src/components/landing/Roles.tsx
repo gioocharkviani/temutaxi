@@ -7,7 +7,7 @@ import { SectionHead } from "./SectionHead";
 export function Roles({ t, lang }: { t: Dictionary["roles"]; lang: Locale }) {
   const { drivers } = t;
   return (
-    <section id="roles" aria-labelledby="roles-title" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+    <section id="roles" aria-labelledby="roles-title" className="mx-auto max-w-site px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
       <SectionHead id="roles-title" label={t.label} title={t.title} />
       <article className="group relative mt-12 grid gap-10 overflow-hidden rounded-[32px] bg-brand p-7 text-ink sm:p-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:p-14">
         <Icon

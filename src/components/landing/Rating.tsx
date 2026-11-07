@@ -29,7 +29,7 @@ export async function Rating({ t, lang }: { t: Dictionary["rating"]; lang: Local
   return (
     <section id="rating" aria-labelledby="rating-title" className="relative overflow-hidden bg-dark text-surface">
       <div aria-hidden="true" className="absolute inset-y-0 right-0 hidden w-1/2 bg-[repeating-linear-gradient(135deg,transparent_0_46px,var(--color-dark-2)_46px_48px)] lg:block" />
-      <div className={`relative mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)] gap-10 px-4 py-20 sm:px-6 lg:gap-16 lg:px-8 lg:py-28 ${showDrivers ? "lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]" : ""}`}>
+      <div className={`relative mx-auto grid max-w-site grid-cols-[minmax(0,1fr)] gap-10 px-4 py-20 sm:px-6 lg:gap-16 lg:px-8 lg:py-28 ${showDrivers ? "lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]" : ""}`}>
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand">{t.label}</p>
           <h2 id="rating-title" className="mt-3 text-3xl font-bold tracking-tight text-balance sm:text-4xl lg:text-[44px] lg:leading-[1.1]">

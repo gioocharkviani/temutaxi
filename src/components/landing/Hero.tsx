@@ -13,7 +13,7 @@ export function Hero({ t, servicesLabel, lang }: { t: Dictionary["hero"]; servic
         aria-hidden="true"
         className="pointer-events-none absolute -right-40 -top-40 size-[560px] rounded-full bg-brand/30 blur-3xl"
       />
-      <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 pb-16 pt-8 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 lg:px-8 lg:pb-24 lg:pt-16">
+      <div className="relative mx-auto grid max-w-site items-center gap-12 px-4 pb-16 pt-8 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 lg:px-8 lg:pb-24 lg:pt-16">
         <div>
           <p className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-medium text-ink-2">
             <Icon name="badgeCheck" className="size-4 text-up" />
@@ -64,7 +64,7 @@ export function Hero({ t, servicesLabel, lang }: { t: Dictionary["hero"]; servic
       </div>
 
       <div className="border-y border-line bg-surface">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-8 gap-y-3 px-4 py-5 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-site flex-wrap items-center gap-x-8 gap-y-3 px-4 py-5 sm:px-6 lg:px-8">
           <span className="text-sm font-medium text-faint">{servicesLabel}</span>
           {site.services.map((s) => (
             <span key={s} className="flex items-center gap-2 text-base font-semibold text-ink-2">

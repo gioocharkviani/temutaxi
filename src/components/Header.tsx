@@ -68,7 +68,7 @@ export function Header({ lang, nav, showRating }: { lang: Locale; nav: Dictionar
         scrolled || open ? "border-b border-line bg-surface/90 backdrop-blur-md" : "border-b border-transparent bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:h-[72px] lg:px-8">
+      <div className="mx-auto flex h-16 max-w-site items-center gap-4 px-4 sm:px-6 lg:h-[72px] lg:px-8">
         <Logo lang={lang} />
 
         <nav className="ml-6 hidden items-center gap-1 lg:flex" aria-label={nav.menu}>

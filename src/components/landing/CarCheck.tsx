@@ -26,7 +26,7 @@ export async function CarCheck({
   const names = Object.fromEntries(carClasses.map((c) => [c, tariffItems[c].name])) as Record<CarClass, string>;
 
   return (
-    <section id="car-check" aria-labelledby="car-check-title" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
+    <section id="car-check" aria-labelledby="car-check-title" className="mx-auto max-w-site px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
       <div className="flex flex-wrap items-end justify-between gap-6">
         <SectionHead id="car-check-title" label={t.label} title={t.title} />
         <p className="max-w-md text-muted">{t.lead}</p>

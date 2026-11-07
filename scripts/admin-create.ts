@@ -1,6 +1,3 @@
-// Creates an admin, or sets a new password if the username exists. A random password is generated and shown once.
-// Run with: npm run admin:create -- <username>
-
 import { randomBytes } from "node:crypto";
 import "./load-env";
 import { getDb } from "../src/db/data-source";

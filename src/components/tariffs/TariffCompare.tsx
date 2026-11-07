@@ -16,7 +16,7 @@ export function TariffCompare({ t }: { t: TariffsDictionary }) {
   ];
 
   return (
-    <section aria-labelledby="compare-title" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+    <section aria-labelledby="compare-title" className="mx-auto max-w-site px-4 py-20 sm:px-6 lg:px-8">
       <SectionHead id="compare-title" label={l.compareLabel} title={l.compareTitle} />
 
       <div className="mt-10 overflow-x-auto rounded-[28px] border border-line bg-surface [scrollbar-width:thin]">

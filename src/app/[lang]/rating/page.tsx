@@ -67,7 +67,7 @@ async function RatingContent({ lang, t, searchParams }: { lang: Locale; t: Dicti
   return (
     <>
       <section className="bg-dark text-surface">
-        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+        <div className="mx-auto max-w-site px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand">{t.label}</p>
           <h1 className="mt-3 text-4xl font-bold tracking-tight text-balance lg:text-[52px] lg:leading-[1.1]">{text.pageTitle}</h1>
           <p className="mt-4 max-w-2xl whitespace-pre-line leading-relaxed text-on-dark-muted">{text.landingText}</p>
@@ -84,7 +84,7 @@ async function RatingContent({ lang, t, searchParams }: { lang: Locale; t: Dicti
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)] gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)] lg:gap-14 lg:px-8 lg:py-20">
+      <section className="mx-auto grid max-w-site grid-cols-[minmax(0,1fr)] gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)] lg:gap-14 lg:px-8 lg:py-20">
         <div className="order-2 min-w-0 lg:order-1">
           <h2 className="mb-6 text-2xl font-bold tracking-tight">{fill(t.topTitle, { n: settings.pageCount })}</h2>
           <Suspense fallback={<RatingListSkeleton count={Math.min(settings.pageCount, 10)} tone="light" label={t.loading} />}>

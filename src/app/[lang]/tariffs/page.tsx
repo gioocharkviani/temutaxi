@@ -36,7 +36,7 @@ async function CarLists({ t }: { t: TariffsDictionary }) {
   };
 
   return (
-    <section aria-labelledby="models-title" className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
+    <section aria-labelledby="models-title" className="mx-auto max-w-site px-4 pb-20 sm:px-6 lg:px-8">
       <div className="flex flex-wrap items-end justify-between gap-6">
         <SectionHead id="models-title" label={t.models.label} title={t.models.title} />
         <p className="max-w-md text-muted">{t.models.lead}</p>
@@ -75,7 +75,7 @@ export default async function TariffsPage({ params }: PageProps<"/[lang]/tariffs
         {/* Hero */}
         <section aria-labelledby="tariffs-title" className="relative overflow-hidden">
           <div aria-hidden="true" className="pointer-events-none absolute -right-40 -top-48 size-[520px] rounded-full bg-brand/30 blur-3xl" />
-          <div className="relative mx-auto grid max-w-7xl items-end gap-10 px-4 pb-12 pt-10 sm:px-6 lg:grid-cols-[1.2fr_0.8fr] lg:px-8 lg:pb-16 lg:pt-16">
+          <div className="relative mx-auto grid max-w-site items-end gap-10 px-4 pb-12 pt-10 sm:px-6 lg:grid-cols-[1.2fr_0.8fr] lg:px-8 lg:pb-16 lg:pt-16">
             <div>
               <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-muted">
                 <span className="size-1.5 rounded-full bg-brand" aria-hidden="true" />
@@ -120,7 +120,7 @@ export default async function TariffsPage({ params }: PageProps<"/[lang]/tariffs
 
         {SHOW_PRICES && (
           <>
-            <section aria-label={t.label} className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <section aria-label={t.label} className="mx-auto max-w-site px-4 sm:px-6 lg:px-8">
               <TariffExplorer t={t} lang={lang} />
             </section>
             <TariffCompare t={t} />
@@ -128,7 +128,7 @@ export default async function TariffsPage({ params }: PageProps<"/[lang]/tariffs
         )}
 
         {/* CTA */}
-        <section aria-labelledby="tariffs-cta" className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
+        <section aria-labelledby="tariffs-cta" className="mx-auto max-w-site px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
           <div className="relative grid items-center gap-6 overflow-hidden rounded-[32px] bg-dark p-8 text-surface sm:p-12 lg:grid-cols-[1fr_auto]">
             <div aria-hidden="true" className="absolute -left-20 -top-24 size-72 rounded-full bg-brand/25 blur-3xl" />
             <div className="relative">

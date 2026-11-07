@@ -8,7 +8,7 @@ const icons: IconName[] = ["smartphone", "zap", "headset", "mapPin", "gift", "sh
 export function Benefits({ t }: { t: Dictionary["benefits"] }) {
   return (
     <section id="benefits" aria-labelledby="benefits-title" className="bg-surface">
-      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+      <div className="mx-auto max-w-site px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
         <SectionHead id="benefits-title" label={t.label} title={t.title} />
         <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {t.items.map((item, i) => (

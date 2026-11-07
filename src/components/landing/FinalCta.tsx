@@ -7,7 +7,7 @@ import { LogoMark } from "../Logo";
 
 export function FinalCta({ t, lang }: { t: Dictionary["cta"]; lang: Locale }) {
   return (
-    <section aria-labelledby="cta-title" className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
+    <section aria-labelledby="cta-title" className="mx-auto max-w-site px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
       <div className="relative overflow-hidden rounded-[32px] bg-dark px-6 py-14 text-center text-surface sm:px-12 lg:py-20">
         <div aria-hidden="true" className="absolute left-1/2 top-0 h-48 w-[640px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand/40 blur-3xl" />
         <LogoMark className="relative mx-auto size-16" />

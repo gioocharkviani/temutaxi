@@ -15,7 +15,7 @@ export function Steps({ t }: { t: Dictionary["steps"] }) {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(var(--color-line)_1px,transparent_1px)] [background-size:22px_22px] [mask-image:linear-gradient(to_bottom,black,transparent_70%)] opacity-60"
       />
-      <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+      <div className="relative mx-auto max-w-site px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
         <SectionHead id="steps-title" label={t.label} title={t.title} />
 
         <Reveal className="relative mt-14">

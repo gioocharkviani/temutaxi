@@ -15,7 +15,7 @@ export function Footer({ lang, t, nav }: { lang: Locale; t: Dictionary["footer"]
 
   return (
     <footer className="bg-dark text-surface">
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.5fr_1fr_1fr] lg:px-8">
+      <div className="mx-auto grid max-w-site gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.5fr_1fr_1fr] lg:px-8">
         <div>
           <Logo lang={lang} inverted />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-on-dark-muted">{t.tagline}</p>
@@ -55,7 +55,7 @@ export function Footer({ lang, t, nav }: { lang: Locale; t: Dictionary["footer"]
       </div>
 
       <div className="border-t border-dark-2">
-        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-6 text-xs text-faint sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
+        <div className="mx-auto flex max-w-site flex-col gap-3 px-4 py-6 text-xs text-faint sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
           <p>{t.disclaimer}</p>
           <p className="shrink-0">© {site.copyrightYear} {site.company.name}. {t.rights}</p>
         </div>

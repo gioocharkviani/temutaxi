@@ -42,7 +42,7 @@ export default async function RegisterPage({ params }: PageProps<"/[lang]/regist
       </a>
       <SiteHeader lang={lang} nav={dict.nav} />
       <main id="main" tabIndex={-1} className="outline-none">
-        <div className="mx-auto max-w-7xl px-4 pb-20 pt-8 sm:px-6 lg:px-8 lg:pb-28 lg:pt-12">
+        <div className="mx-auto max-w-site px-4 pb-20 pt-8 sm:px-6 lg:px-8 lg:pb-28 lg:pt-12">
           <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-muted">
             <span className="size-1.5 rounded-full bg-brand" aria-hidden="true" />
             {t.badge}

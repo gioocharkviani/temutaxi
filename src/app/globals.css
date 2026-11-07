@@ -2,6 +2,8 @@
 
 /* Colour palette from the original site. */
 @theme {
+  /* Width of the public site's main container: used as max-w-site. */
+  --container-site: 1480px;
   --color-brand: #fce000;
   --color-brand-hover: #ffe936;
   --color-brand-press: #f2d600;
