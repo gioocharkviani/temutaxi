@@ -22,13 +22,24 @@ function parseRules(text: string) {
   return blocks.filter((block) => block.kind !== "paragraph" || block.text);
 }
 
+/** The headings of a text, with the ids RichText gives them, for a table of contents. */
+export function richTextHeadings(text: string, idPrefix: string) {
+  return parseRules(text)
+    .map((block, index) => (block.kind === "heading" ? { id: `${idPrefix}-${index}`, text: block.text } : null))
+    .filter((heading) => heading !== null);
+}
+
 /** The admin's text, rendered as plain React text, so it can never inject markup into the page. */
-export function RichText({ text, heading: Heading = "h3" }: { text: string; heading?: "h2" | "h3" }) {
+export function RichText({ text, heading: Heading = "h3", idPrefix }: { text: string; heading?: "h2" | "h3"; idPrefix?: string }) {
   return (
     <div className="space-y-4 leading-relaxed text-ink-2">
       {parseRules(text).map((block, index) => {
         if (block.kind === "heading") {
-          return <Heading key={index} className="pt-4 text-xl font-bold tracking-tight text-ink first:pt-0">{block.text}</Heading>;
+          return (
+            <Heading key={index} id={idPrefix && `${idPrefix}-${index}`} className="scroll-mt-28 pt-4 text-xl font-bold tracking-tight text-ink first:pt-0">
+              {block.text}
+            </Heading>
+          );
         }
         if (block.kind === "list") {
           return (

@@ -7,6 +7,7 @@ const privacyRu: PrivacyDictionary = {
   },
   label: "Правовая информация",
   title: "Политика конфиденциальности",
+  contents: "На этой странице",
   updatedLabel: "Последнее обновление",
   updated: "7 ноября 2026 г.",
   intro:

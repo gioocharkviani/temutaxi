@@ -5,6 +5,7 @@ const privacyEn = {
   },
   label: "Legal",
   title: "Privacy policy",
+  contents: "On this page",
   updatedLabel: "Last updated",
   updated: "7 November 2026",
   intro:

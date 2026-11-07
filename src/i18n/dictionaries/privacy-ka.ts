@@ -7,6 +7,7 @@ const privacyKa: PrivacyDictionary = {
   },
   label: "იურიდიული ინფორმაცია",
   title: "კონფიდენციალურობის პოლიტიკა",
+  contents: "ამ გვერდზე",
   updatedLabel: "ბოლო განახლება",
   updated: "2026 წლის 7 ნოემბერი",
   intro:

@@ -124,9 +124,9 @@ async function RatingContent({ lang, t, searchParams }: { lang: Locale; t: Dicti
       </section>
 
       <section aria-labelledby="rules-title" className="border-t border-line bg-surface-2">
-        <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6 lg:py-20">
-          <h2 id="rules-title" className="text-3xl font-bold tracking-tight">{t.rulesTitle}</h2>
-          <div className="mt-8">
+        <div className="mx-auto grid max-w-site grid-cols-[minmax(0,1fr)] gap-8 px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:gap-14 lg:px-8 lg:py-20">
+          <h2 id="rules-title" className="text-3xl font-bold tracking-tight lg:sticky lg:top-28 lg:self-start">{t.rulesTitle}</h2>
+          <div className="max-w-3xl">
             <RichText text={text.rules} />
           </div>
         </div>
