@@ -14,7 +14,7 @@ const privacyEn = {
     {
       title: "1. Who is responsible for your data",
       paragraphs: [
-        "The website is operated by {company} (ID {companyId}), {address}. It is an official partner of Yandex Go in Georgia, but it is not the official website of Yandex Go.",
+        "The website is operated by {company} (company ID {companyId}), {address}. It is an official partner of Yandex Go in Georgia, but it is not the official website of Yandex Go.",
       ],
     },
     {
@@ -45,17 +45,17 @@ const privacyEn = {
       ],
     },
     {
-      title: "5. Driver rating",
+      title: "5. Driver leaderboard",
       paragraphs: [
-        "The website may show a rating of the park's drivers, based on completed orders from Yandex Fleet. The rating is updated on a regular schedule. For each driver we store only what the rating and its search need: the driver's identifier and full name, the number of completed orders per tariff in the rating period, and the time of the latest order. We do not store individual orders, and each update replaces the previous figures.",
-        "The public pages show only the name in the form the park has chosen and the number of orders. Anyone can search the rating by name, and a match shows the driver's place in that same form. A driver can ask to be removed from the rating at any time using the contacts below.",
+        "The website may show a leaderboard of the park's drivers, based on completed orders from Yandex Fleet. The leaderboard is updated on a regular schedule. For each driver we store only what the leaderboard and its search need: the driver's identifier and full name, the number of completed orders per tariff in the leaderboard period, the time of the latest order and, if Yandex provides it, the phone number. The phone number is used only for search and is never shown on the site. We do not store individual orders, and each update replaces the previous figures.",
+        "The public pages show only the name in the form the park has chosen and the number of orders. Anyone can search the leaderboard by name or full phone number, and a match shows the driver's place in that same form. A driver can ask to be removed from the leaderboard at any time using the contacts below.",
       ],
     },
     {
       title: "6. How long we keep data",
       paragraphs: [
         "Submitted applications are stored in our database, where only authorised administrators can see them, and passed to Yandex Fleet. We keep them for as long as they are needed for your application and the park's work with you, or as required by law. You can ask us to delete yours at any time.",
-        "Rating data is kept while it is needed for the rating. Technical server logs are kept for a limited time and are used only to find and fix errors.",
+        "Leaderboard data is kept while it is needed for the leaderboard. Technical server logs are kept for a limited time and are used only to find and fix errors.",
       ],
     },
     {

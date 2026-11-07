@@ -42,7 +42,7 @@ export function Header({ lang, nav, showRating }: { lang: Locale; nav: Dictionar
 
   const links = [
     { href: `/${lang}/tariffs`, label: nav.tariffs },
-    ...(showRating ? [{ href: `/${lang}/rating`, label: nav.rating }] : []),
+    ...(showRating ? [{ href: `/${lang}/leaderboard`, label: nav.rating }] : []),
   ];
   const isActive = (href: string) => pathname === href;
 

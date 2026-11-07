@@ -101,6 +101,55 @@ async function requestOrdersPage(config: Config, from: Date, to: Date, cursor?: 
 }
 
 type Config = NonNullable<ReturnType<typeof readConfig>>;
+
+const PROFILES_PAGE_SIZE = 1000;
+const MAX_PROFILE_PAGES = 200;
+
+/**
+ * POST /v1/parks/driver-profiles/list: each driver's phone numbers, by driver id.
+ * The API key needs permission to read drivers; without it Yandex answers 403.
+ */
+export async function listDriverPhones(): Promise<Map<string, string[]>> {
+  const config = readConfig();
+  if (!config) throw new Error("Yandex API settings are missing from .env");
+
+  const phones = new Map<string, string[]>();
+  for (let page = 0, offset = 0; page < MAX_PROFILE_PAGES; page++, offset += PROFILES_PAGE_SIZE) {
+    const data = await requestProfilesPage(config, offset);
+    for (const item of data.driver_profiles ?? []) {
+      const id = item.driver_profile?.id;
+      const list = (item.driver_profile?.phones ?? []).filter(Boolean);
+      if (id && list.length) phones.set(id, list);
+    }
+    if (!data.driver_profiles?.length || offset + PROFILES_PAGE_SIZE >= (data.total ?? 0)) return phones;
+  }
+  return phones;
+}
+
+type ProfilesPage = { driver_profiles?: { driver_profile?: { id?: string; phones?: string[] } }[]; total?: number; message?: string };
+
+async function requestProfilesPage(config: Config, offset: number): Promise<ProfilesPage> {
+  for (let attempt = 0; ; attempt++) {
+    const response = await fetch(`${config.baseUrl}/v1/parks/driver-profiles/list`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept-Language": "en", "X-API-Key": config.apiKey, "X-Client-ID": config.clientId },
+      body: JSON.stringify({
+        limit: PROFILES_PAGE_SIZE,
+        offset,
+        fields: { driver_profile: ["id", "phones"] },
+        query: { park: { id: config.parkId } },
+      }),
+      signal: AbortSignal.timeout(TIMEOUT_MS * 2),
+    });
+    if (response.status === 429 && attempt < RATE_LIMIT_RETRIES) {
+      await new Promise((resolve) => setTimeout(resolve, 2000 * (attempt + 1)));
+      continue;
+    }
+    const data: ProfilesPage = await response.json().catch(() => ({}));
+    if (!response.ok) throw new FleetApiError(response.status, data.message ?? "Unknown error");
+    return data;
+  }
+}
 type WorkRule = { id: string; name: string; is_enabled: boolean };
 
 /** GET /v1/parks/driver-work-rules: the park's work rules; null when the request fails. */

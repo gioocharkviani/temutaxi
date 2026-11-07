@@ -15,6 +15,7 @@ import { RegistrationsAndSiteSettings1762500000000 } from "./migrations/17625000
 import { LiveRatingAndContent1762600000000 } from "./migrations/1762600000000-LiveRatingAndContent";
 import { StoredRatingAndPrivacy1762700000000 } from "./migrations/1762700000000-StoredRatingAndPrivacy";
 import { SeoAndStoredDataTerms1762800000000 } from "./migrations/1762800000000-SeoAndStoredDataTerms";
+import { LeaderboardAndPhones1762900000000 } from "./migrations/1762900000000-LeaderboardAndPhones";
 
 function createDataSource() {
   return new DataSource({
@@ -34,16 +35,22 @@ function createDataSource() {
       RegistrationEntity,
       SiteSettingsEntity,
     ],
-    migrations: [InitialSchema1762400000000, RegistrationsAndSiteSettings1762500000000, LiveRatingAndContent1762600000000, StoredRatingAndPrivacy1762700000000, SeoAndStoredDataTerms1762800000000],
+    migrations: [
+      InitialSchema1762400000000,
+      RegistrationsAndSiteSettings1762500000000,
+      LiveRatingAndContent1762600000000,
+      StoredRatingAndPrivacy1762700000000,
+      SeoAndStoredDataTerms1762800000000,
+      LeaderboardAndPhones1762900000000,
+    ],
   });
 }
 
-// Kept on globalThis so hot reloading in development does not open a new pool on every change.
 const store = globalThis as unknown as { temutaxiDb?: Promise<DataSource> };
 
-/** The connected database. A failed connection is forgotten, so the next call tries again. */
 export function getDb(): Promise<DataSource> {
-  if (!process.env.DATABASE_URL) return Promise.reject(new Error("DATABASE_URL is not set"));
+  if (!process.env.DATABASE_URL)
+    return Promise.reject(new Error("DATABASE_URL is not set"));
   store.temutaxiDb ??= createDataSource()
     .initialize()
     .catch((error) => {

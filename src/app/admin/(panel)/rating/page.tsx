@@ -33,13 +33,13 @@ async function Rating() {
   return (
     <>
       <JobAutoRefresh running={running} />
-      <PageTitle title="რეიტინგი" />
+      <PageTitle title="ლიდერბორდი" />
       <RatingStatus settings={settings} />
 
-      <Block title="განახლება" hint="განრიგს ქვემოთ, პარამეტრებში ირჩევ. ეს ღილაკი რეიტინგს ახლავე ანახლებს.">
+      <Block title="განახლება" hint="განრიგს ქვემოთ, პარამეტრებში ირჩევ. ეს ღილაკი ლიდერბორდს ახლავე ანახლებს.">
         <JobCard
           title={JOB_NAMES.rating_sync}
-          body="წამოიღებს რეიტინგს Yandex-იდან და ბაზაში შეინახავს."
+          body="წამოიღებს ლიდერბორდს Yandex-იდან და ბაზაში შეინახავს."
           detail={`ბოლო განახლება: ${formatTime(settings.lastSyncAt)}`}
           running={running}
           action={startRatingSyncAction}
@@ -95,7 +95,7 @@ const SCHEDULE_NAMES = { hourly: "ყოველ საათში", daily: "�
 /** Whether the rating is on the site, when it updates and, when something is wrong, exactly why. */
 async function RatingStatus({ settings }: { settings: RatingSettings }) {
   if (!settings.enabled) {
-    return <StatusBox tone="neutral" title="რეიტინგი საიტზე არ ჩანს">გამორთულია პარამეტრებში, ამიტომ არც განახლდება.</StatusBox>;
+    return <StatusBox tone="neutral" title="ლიდერბორდი საიტზე არ ჩანს">გამორთულია პარამეტრებში, ამიტომ არც განახლდება.</StatusBox>;
   }
 
   const [rating, lastJob] = await Promise.all([getRating(settings), getLastRatingJob()]);
@@ -104,9 +104,9 @@ async function RatingStatus({ settings }: { settings: RatingSettings }) {
 
   if (!rating) {
     return failure ? (
-      <StatusBox tone="bad" title="რეიტინგი ვერ განახლდა">{failure} საიტზე ჩანს პირობები და შეტყობინება, რომ რეიტინგი დროებით მიუწვდომელია.</StatusBox>
+      <StatusBox tone="bad" title="ლიდერბორდი ვერ განახლდა">{failure} საიტზე ჩანს პირობები და შეტყობინება, რომ რეიტინგი დროებით მიუწვდომელია.</StatusBox>
     ) : (
-      <StatusBox tone="neutral" title="რეიტინგი ახლდება">არჩეული პერიოდის მონაცემები ჯერ ჩამოტვირთული არ არის. ეს ერთ წუთამდე გრძელდება.</StatusBox>
+      <StatusBox tone="neutral" title="ლიდერბორდი ახლდება">არჩეული პერიოდის მონაცემები ჯერ ჩამოტვირთული არ არის. ეს ერთ წუთამდე გრძელდება.</StatusBox>
     );
   }
   if (failure) {
@@ -117,10 +117,10 @@ async function RatingStatus({ settings }: { settings: RatingSettings }) {
     );
   }
   if (rating.visible.length === 0) {
-    return <StatusBox tone="neutral" title="რეიტინგი ჩართულია, მაგრამ მძღოლები არ არის">ამ პერიოდსა და ტარიფებში შესაბამისი შეკვეთები არ მოიძებნა. საიტზე ჩანს მხოლოდ პირობები. {schedule}</StatusBox>;
+    return <StatusBox tone="neutral" title="ლიდერბორდი ჩართულია, მაგრამ მძღოლები არ არის">ამ პერიოდსა და ტარიფებში შესაბამისი შეკვეთები არ მოიძებნა. საიტზე ჩანს მხოლოდ პირობები. {schedule}</StatusBox>;
   }
   return (
-    <StatusBox tone="good" title="რეიტინგი ჩანს საიტზე">
+    <StatusBox tone="good" title="ლიდერბორდი ჩანს საიტზე">
       მთავარ გვერდზე: {settings.landingCount}, რეიტინგის გვერდზე: {settings.pageCount}. მძღოლები პერიოდში: {rating.visible.length}.
       ბოლო განახლება: {formatTime(rating.syncedAt)}. {schedule}
     </StatusBox>

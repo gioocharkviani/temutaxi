@@ -76,7 +76,7 @@ const tariffsRu: TariffsDictionary = {
       name: "Бизнес",
       tagline: "Автомобили представительского класса",
       cars: "Mercedes-Benz E-Class, BMW 5er, Lexus ES",
-      requirements: ["Седан бизнес-класса", "Рейтинг от 4.9", "Тёмный кузов, премиальный салон"],
+      requirements: ["Седан бизнес-класса", "Рейтинг от 4.9", "Чёрный или белый кузов, премиальный салон"],
     },
     kids: {
       name: "Детский",

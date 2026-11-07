@@ -1,6 +1,6 @@
 import type { RatingSettings } from "@/db/entities";
 import type { Locale } from "@/i18n/config";
-import { fill } from "@/i18n/fill";
+import { plural, type PluralForms } from "@/i18n/plural";
 import { getPeriodRange } from "@/lib/rating/period";
 
 export const INTL_LOCALE: Record<Locale, string> = { ka: "ka-GE", en: "en-GB", ru: "ru-RU" };
@@ -14,8 +14,8 @@ export function formatLongDate(date: Date, lang: Locale) {
 }
 
 /** "Last 14 days", or the dates of a fixed period. */
-export function periodLabel(settings: RatingSettings, rollingText: string, lang: Locale) {
-  if (settings.periodMode === "rolling") return fill(rollingText, { days: settings.rollingDays });
+export function periodLabel(settings: RatingSettings, rollingText: PluralForms, lang: Locale) {
+  if (settings.periodMode === "rolling") return plural(rollingText, settings.rollingDays, lang);
 
   const format = (date: Date) =>
     new Intl.DateTimeFormat(INTL_LOCALE[lang], { day: "numeric", month: "short", timeZone: "Asia/Tbilisi" }).format(date);

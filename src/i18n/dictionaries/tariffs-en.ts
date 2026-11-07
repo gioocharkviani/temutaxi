@@ -1,7 +1,7 @@
 const tariffsEn = {
   meta: {
     title: "Yandex Go Tariffs and Car List in Georgia — TemuTaxi",
-    description: "Which tariff can your car work in? Economy, Comfort, Comfort+, Electric, Minivan, Business and Child tariffs, from the official Yandex Pro list.",
+    description: "Which tariff can your car work in? Economy, Comfort, Comfort+, Electro, Minivan, Business and Kids, from the official Yandex Pro list.",
   },
   label: "Tariffs",
   title: "Yandex Go tariffs",
@@ -76,7 +76,7 @@ const tariffsEn = {
       name: "Business",
       tagline: "Executive cars for important trips",
       cars: "Mercedes-Benz E-Class, BMW 5er, Lexus ES",
-      requirements: ["Executive-class sedan", "Rating 4.9 or higher", "Dark exterior, premium interior"],
+      requirements: ["Executive-class sedan", "Rating 4.9 or higher", "Black or white exterior, premium interior"],
     },
     kids: {
       name: "Kids",

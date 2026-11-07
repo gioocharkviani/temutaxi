@@ -10,7 +10,7 @@ export const formatTime = (date: Date | null) =>
     : "—";
 
 export const JOB_NAMES: Record<JobType, string> = {
-  rating_sync: "რეიტინგის განახლება",
+  rating_sync: "ლიდერბორდის განახლება",
   car_list_update: "მანქანების სიის ჩამოტვირთვა",
 };
 

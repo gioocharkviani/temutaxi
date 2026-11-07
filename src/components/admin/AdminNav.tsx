@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 const PAGES = [
   { href: "/admin", label: "რეგისტრაციები" },
-  { href: "/admin/rating", label: "რეიტინგი" },
+  { href: "/admin/rating", label: "ლიდერბორდი" },
   { href: "/admin/privacy", label: "Privacy Policy" },
   { href: "/admin/seo", label: "SEO" },
   { href: "/admin/cars", label: "მანქანების სია" },

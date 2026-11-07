@@ -1,4 +1,3 @@
-// Same 13 colours as the original form; `value` is what gets submitted.
 export const carColors = [
   { id: "white", value: "თეთრი", hex: "#ffffff" },
   { id: "black", value: "შავი", hex: "#1c1c1c" },

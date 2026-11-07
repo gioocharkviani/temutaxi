@@ -50,7 +50,7 @@ export function SettingsForm({ settings }: { settings: FormSettings }) {
         <Field label="რამდენი მძღოლი ჩანდეს მთავარ გვერდზე" hint="0-ის შემთხვევაში ჩანს მხოლოდ პირობები." error={error("landingCount")}>
           <input name="landingCount" type="number" min={0} max={50} value={values.landingCount} onChange={(e) => set("landingCount", Number(e.target.value))} className={adminInput} />
         </Field>
-        <Field label="რამდენი მძღოლი ჩანდეს რეიტინგის გვერდზე" hint="დანარჩენები თავიანთ ადგილს ძიებით იპოვიან." error={error("pageCount")}>
+        <Field label="რამდენი მძღოლი ჩანდეს ლიდერბორდის გვერდზე" hint="დანარჩენები თავიანთ ადგილს ძიებით იპოვიან." error={error("pageCount")}>
           <input name="pageCount" type="number" min={1} max={100} value={values.pageCount} onChange={(e) => set("pageCount", Number(e.target.value))} className={adminInput} />
         </Field>
         <Field label="რიგითობა თანაბარი შეკვეთებისას" hint="ყოველთვის წინაა ის, ვისაც მეტი შეკვეთა აქვს." error={error("tieBreak")}>
@@ -59,13 +59,13 @@ export function SettingsForm({ settings }: { settings: FormSettings }) {
             <option value="last">წინ ის, ვინც ბოლო შეკვეთა უფრო გვიან შეასრულა</option>
           </select>
         </Field>
-        <Field label="რეიტინგის განახლების განრიგი" hint="განახლება Yandex-იდან წამოიღებს მონაცემებს და ბაზაში შეინახავს." error={error("syncSchedule")}>
+        <Field label="ლიდერბორდის განახლების განრიგი" hint="განახლება Yandex-იდან წამოიღებს მონაცემებს და ბაზაში შეინახავს." error={error("syncSchedule")}>
           <select name="syncSchedule" value={values.syncSchedule} onChange={(e) => set("syncSchedule", e.target.value as SyncSchedule)} className={adminInput}>
             <option value="hourly">ყოველ საათში</option>
             <option value="daily">დღეში ერთხელ, ღამის 12 საათზე</option>
           </select>
         </Field>
-        <Field label="მინიმალური შეკვეთები რეიტინგში მოსახვედრად" error={error("minOrders")}>
+        <Field label="მინიმალური შეკვეთები ლიდერბორდში მოსახვედრად" error={error("minOrders")}>
           <input name="minOrders" type="number" min={1} value={values.minOrders} onChange={(e) => set("minOrders", Number(e.target.value))} className={adminInput} />
         </Field>
       </div>
@@ -95,11 +95,11 @@ export function SettingsForm({ settings }: { settings: FormSettings }) {
             <Field label="მთავარი გვერდი: მოკლე პირობები" error={error(`content.${code}.landingText`)}>
               <textarea name={`content.${code}.landingText`} rows={3} value={values.content[code].landingText} onChange={(e) => setText(code, "landingText", e.target.value)} className={adminTextarea} />
             </Field>
-            <Field label="რეიტინგის გვერდი: სათაური" error={error(`content.${code}.pageTitle`)}>
+            <Field label="ლიდერბორდის გვერდი: სათაური" error={error(`content.${code}.pageTitle`)}>
               <input name={`content.${code}.pageTitle`} value={values.content[code].pageTitle} onChange={(e) => setText(code, "pageTitle", e.target.value)} className={adminInput} />
             </Field>
             <Field
-              label="რეიტინგის გვერდი: სრული წესები და პირობები"
+              label="ლიდერბორდის გვერდი: სრული წესები და პირობები"
               hint="„# “ ხაზის დასაწყისში ქმნის სათაურს, „- “ ჩამონათვალს, ცარიელი ხაზი ახალ აბზაცს."
               error={error(`content.${code}.rules`)}
             >

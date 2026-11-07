@@ -1,8 +1,5 @@
 import type { IconName } from "@/components/Icon";
 
-// DEMO DATA: tariff names follow Yandex Go in Georgia, but every number is a placeholder.
-// Replace with the figures from the official Yandex Go page before launch.
-
 export type TariffId =
   | "economy"
   | "comfort"

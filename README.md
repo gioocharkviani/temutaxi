@@ -32,7 +32,7 @@ npm run dev                       # http://localhost:3000
 | `/ka`, `/en`, `/ru` | Landing page |
 | `/ka/register` | Taxi driver registration |
 | `/ka/tariffs` | Car checker and car lists per category (linked from the footer only) |
-| `/ka/rating` | Top drivers, full rating rules, and search for a driver's own place |
+| `/ka/leaderboard` | Leaderboard: top drivers, full rules, and live search by name or full phone number (`/ka/rating` redirects here) |
 | `/admin` | Admin panel: registrations |
 | `/admin/rating` | Rating status, update, settings, texts, drivers, history |
 | `/admin/privacy` | Privacy policy text |
@@ -88,14 +88,14 @@ The database stores one summary row per driver and tariff in `rating_drivers`: d
 
 1. **Update.** `lib/jobs.ts` downloads the period's completed orders from Yandex (`POST /v1/parks/orders/list`), counts them, and replaces the stored rows in one transaction. A failed download leaves the old rating in place. The update time goes in `rating_settings.last_sync_at` and is shown on the site.
 2. **Ranking.** `lib/rating/ranking.ts` adds up the chosen tariffs from the stored rows. More orders rank higher, and ties follow the admin's choice.
-3. **Display.** The landing page shows the short conditions and the top `landingCount` drivers. `/ka/rating` shows the top `pageCount`, the full rules, and a search. Visitors never cause a call to Yandex.
-4. **Off.** The landing section and the menu link are not rendered, `/ka/rating` redirects to the landing page, and no updates run.
+3. **Display.** The landing page shows the short conditions and the top `landingCount` drivers. `/ka/leaderboard` shows the top `pageCount`, the full rules, and a search. Visitors never cause a call to Yandex.
+4. **Off.** The landing section and the menu link are not rendered, `/ka/leaderboard` redirects to the landing page, and no updates run.
 
 **Schedule.** The admin panel chooses every hour or each midnight in Georgia. `src/instrumentation.ts` checks once a minute inside the server, which works with `next start` and `next dev`. After a failure it tries again 15 minutes later. Changing the period starts an update straight away; until it finishes, the site shows a short notice rather than numbers from another period.
 
 **Hosting without a permanent server (Vercel).** The timer does not run there. Set `CRON_SECRET` and have a scheduler call `/api/cron/rating-sync` every hour. It updates only when the schedule in the admin panel says so.
 
-**Search** works in Georgian, Latin and Russian letters, because Yandex holds the names in Latin letters. It matches the full name but shows the name only in the form chosen in the admin panel. Hidden drivers are not found.
+**Search** shows results while the driver types (a server action, `app/[lang]/leaderboard/actions.ts`). A full 9-digit phone number also works when Yandex provides phones (`POST /v1/parks/driver-profiles/list`, which needs its own permission on the API key; without it the update still succeeds and the admin panel says why). Phones are stored as the last 9 digits for search only and never sent to the browser. Name search works in Georgian, Latin and Russian letters, because Yandex holds the names in Latin letters. It matches the full name but shows the name only in the form chosen in the admin panel. Hidden drivers are not found.
 
 The API key needs permission to read orders; otherwise Yandex answers 403, and the reason appears at the top of the admin panel.
 

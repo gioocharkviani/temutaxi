@@ -6,13 +6,13 @@ import type { Locale } from "@/i18n/config";
 
 export const DEFAULT_RATING_CONTENT: RatingContent = {
   ka: {
-    landingTitle: "რეიტინგის პირობები",
+    landingTitle: "ლიდერბორდის პირობები",
     landingText: "თითო დასრულებული შეკვეთა ერთხელ ითვლება. თანაბარი რაოდენობისას წინ ის არის, ვინც ეს რაოდენობა პირველმა შეაგროვა.",
-    pageTitle: "მძღოლების რეიტინგი",
+    pageTitle: "მძღოლების ლიდერბორდი",
     rules: `# როგორ ითვლება
-- რეიტინგი ეფუძნება პარკის დასრულებულ შეკვეთებს, რომლებიც Yandex-იდან მოდის.
+- ლიდერბორდი ეფუძნება პარკის დასრულებულ შეკვეთებს, რომლებიც Yandex-იდან მოდის.
 - თითო დასრულებული შეკვეთა ერთხელ ითვლება.
-- ითვლება მხოლოდ ტაქსის შეკვეთები. მიტანა რეიტინგში არ შედის.
+- ითვლება მხოლოდ ტაქსის შეკვეთები. მიტანა ლიდერბორდში არ შედის.
 
 # ადგილების განაწილება
 - წინ ის მძღოლია, ვისაც პერიოდში მეტი შეკვეთა აქვს.
@@ -22,20 +22,21 @@ export const DEFAULT_RATING_CONTENT: RatingContent = {
 თუ ტოპში არ ხართ, თქვენი ადგილი ძიებით იპოვეთ: ჩაწერეთ სახელი ან გვარი.
 
 # რა მონაცემებს ვინახავთ
-რეიტინგისა და ძიებისთვის თითოეულ მძღოლზე ვინახავთ მხოლოდ:
+ლიდერბორდისა და ძიებისთვის თითოეულ მძღოლზე ვინახავთ მხოლოდ:
 - მძღოლის იდენტიფიკატორს Yandex-ში
 - სახელსა და გვარს
 - პერიოდში დასრულებული შეკვეთების რაოდენობას ტარიფების მიხედვით
 - ბოლო შეკვეთის დროს
+- ტელეფონის ნომერს, თუ Yandex მას გადმოგვცემს: მხოლოდ ძიებისთვის, საიტზე არ ჩანს
 
-ცალკეულ შეკვეთებს, მარშრუტებს, შემოსავალსა და ტელეფონის ნომერს რეიტინგისთვის არ ვინახავთ. ყოველი განახლება წინა მონაცემებს ანაცვლებს. მძღოლს შეუძლია მოითხოვოს რეიტინგიდან ამოღება.`,
+ცალკეულ შეკვეთებს, მარშრუტებსა და შემოსავალს არ ვინახავთ. ყოველი განახლება წინა მონაცემებს ანაცვლებს. მძღოლს შეუძლია მოითხოვოს ლიდერბორდიდან ამოღება.`,
   },
   en: {
-    landingTitle: "Rating conditions",
+    landingTitle: "Leaderboard conditions",
     landingText: "Each completed order counts once. With equal counts, the driver who reached that count first ranks higher.",
-    pageTitle: "Driver rating",
+    pageTitle: "Driver leaderboard",
     rules: `# How it is counted
-- The rating is based on the park's completed orders, received from Yandex.
+- The leaderboard is based on the park's completed orders, received from Yandex.
 - Each completed order counts once.
 - Only taxi orders count. Delivery is not included.
 
@@ -47,20 +48,21 @@ export const DEFAULT_RATING_CONTENT: RatingContent = {
 If you are not in the top, find your place with the search: enter your name or surname.
 
 # What data we store
-For the rating and its search, we store only this for each driver:
+For the leaderboard and its search, we store only this for each driver:
 - The driver's identifier in Yandex
 - Name and surname
 - The number of completed orders per tariff in the period
 - The time of the latest order
+- The phone number, if Yandex provides it: used only for search and never shown on the site
 
-We do not store individual orders, routes, earnings or phone numbers for the rating. Each update replaces the previous figures. A driver can ask to be removed from the rating.`,
+We do not store individual orders, routes or earnings. Each update replaces the previous figures. A driver can ask to be removed from the leaderboard.`,
   },
   ru: {
-    landingTitle: "Условия рейтинга",
+    landingTitle: "Условия лидерборда",
     landingText: "Каждый завершённый заказ считается один раз. При равном количестве выше тот, кто набрал его раньше.",
-    pageTitle: "Рейтинг водителей",
+    pageTitle: "Лидерборд водителей",
     rules: `# Как считается
-- Рейтинг основан на завершённых заказах парка, которые поступают из Яндекса.
+- Лидерборд основан на завершённых заказах парка, которые поступают из Яндекса.
 - Каждый завершённый заказ считается один раз.
 - Считаются только заказы такси. Доставка не учитывается.
 
@@ -72,13 +74,14 @@ We do not store individual orders, routes, earnings or phone numbers for the rat
 Если вас нет в топе, найдите своё место через поиск: введите имя или фамилию.
 
 # Какие данные мы храним
-Для рейтинга и поиска по каждому водителю мы храним только:
+Для лидерборда и поиска по каждому водителю мы храним только:
 - Идентификатор водителя в Яндексе
 - Имя и фамилию
 - Количество завершённых заказов по тарифам за период
 - Время последнего заказа
+- Номер телефона, если Яндекс его передаёт: только для поиска, на сайте не показывается
 
-Отдельные заказы, маршруты, доход и номера телефонов для рейтинга мы не храним. Каждое обновление заменяет прежние данные. Водитель может попросить убрать его из рейтинга.`,
+Отдельные заказы, маршруты и доход мы не храним. Каждое обновление заменяет прежние данные. Водитель может попросить убрать его из лидерборда.`,
   },
 };
 

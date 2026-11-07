@@ -1,10 +1,7 @@
-// Database tables. EntitySchema is used instead of decorators, which the Next.js compiler does not support well.
-
 import { EntitySchema } from "typeorm";
 
 export type PeriodMode = "rolling" | "fixed";
 export type NameDisplay = "full" | "short" | "first";
-/** Who ranks higher when two drivers have the same number of orders. */
 export type TieBreak = "first" | "last";
 
 export type RatingText = {
@@ -14,38 +11,29 @@ export type RatingText = {
   rules: string;
 };
 export type RatingContent = Record<"ka" | "en" | "ru", RatingText>;
-/** How often the stored rating is updated: every hour, or each midnight in Georgia. */
 export type SyncSchedule = "hourly" | "daily";
 
 export interface RatingSettings {
   id: number;
   enabled: boolean;
-  /** Drivers shown on the landing page; 0 shows only the conditions. */
   landingCount: number;
-  /** Drivers shown on the rating page. */
   pageCount: number;
   tieBreak: TieBreak;
-  /** Texts per language; null until an admin saves them, and the defaults apply. */
   content: RatingContent | null;
   syncSchedule: SyncSchedule;
-  /** When the stored rating was last updated from Yandex. */
   lastSyncAt: Date | null;
-  /** The period the stored rows were counted for. */
   syncPeriodKey: string | null;
   syncFrom: Date | null;
   syncTo: Date | null;
   periodMode: PeriodMode;
   rollingDays: number;
-  /** YYYY-MM-DD in Georgian time; used when periodMode is "fixed". */
   periodStart: string | null;
   periodEnd: string | null;
-  /** Yandex order categories that count. */
   categories: string[];
   nameDisplay: NameDisplay;
   minOrders: number;
   showScores: boolean;
   showPrizes: boolean;
-  /** Prize in GEL per place: index 0 is first place. */
   prizes: number[];
   hiddenDriverIds: string[];
   updatedAt: Date;
@@ -63,13 +51,28 @@ export const RatingSettingsEntity = new EntitySchema<RatingSettings>({
     content: { type: "json", nullable: true },
     syncSchedule: { name: "sync_schedule", type: "varchar", length: 16 },
     lastSyncAt: { name: "last_sync_at", type: "datetime", nullable: true },
-    syncPeriodKey: { name: "sync_period_key", type: "varchar", length: 64, nullable: true },
+    syncPeriodKey: {
+      name: "sync_period_key",
+      type: "varchar",
+      length: 64,
+      nullable: true,
+    },
     syncFrom: { name: "sync_from", type: "datetime", nullable: true },
     syncTo: { name: "sync_to", type: "datetime", nullable: true },
     periodMode: { name: "period_mode", type: "varchar", length: 16 },
     rollingDays: { name: "rolling_days", type: "int" },
-    periodStart: { name: "period_start", type: "varchar", length: 10, nullable: true },
-    periodEnd: { name: "period_end", type: "varchar", length: 10, nullable: true },
+    periodStart: {
+      name: "period_start",
+      type: "varchar",
+      length: 10,
+      nullable: true,
+    },
+    periodEnd: {
+      name: "period_end",
+      type: "varchar",
+      length: 10,
+      nullable: true,
+    },
     categories: { type: "json" },
     nameDisplay: { name: "name_display", type: "varchar", length: 16 },
     minOrders: { name: "min_orders", type: "int" },
@@ -81,24 +84,30 @@ export const RatingSettingsEntity = new EntitySchema<RatingSettings>({
   },
 });
 
-/** One driver's completed orders in one tariff during the period. Individual orders are not stored. */
 export interface RatingDriver {
   driverId: string;
   category: string;
   driverName: string;
   orders: number;
   lastOrderAt: Date;
+  phones: string | null;
 }
 
 export const RatingDriverEntity = new EntitySchema<RatingDriver>({
   name: "RatingDriver",
   tableName: "rating_drivers",
   columns: {
-    driverId: { name: "driver_id", type: "varchar", length: 100, primary: true },
+    driverId: {
+      name: "driver_id",
+      type: "varchar",
+      length: 100,
+      primary: true,
+    },
     category: { type: "varchar", length: 32, primary: true },
     driverName: { name: "driver_name", type: "varchar", length: 255 },
     orders: { type: "int" },
     lastOrderAt: { name: "last_order_at", type: "datetime" },
+    phones: { type: "varchar", length: 255, nullable: true },
   },
 });
 
@@ -129,7 +138,9 @@ export const JobRunEntity = new EntitySchema<JobRun>({
     items: { type: "int", nullable: true },
     message: { type: "text", nullable: true },
   },
-  indices: [{ name: "idx_job_runs_type_started", columns: ["type", "startedAt"] }],
+  indices: [
+    { name: "idx_job_runs_type_started", columns: ["type", "startedAt"] },
+  ],
 });
 
 export interface CarListEntry {
@@ -185,22 +196,55 @@ export const RegistrationEntity = new EntitySchema<Registration>({
   tableName: "registrations",
   columns: {
     id: { type: "int", primary: true, generated: true },
-    requestId: { name: "request_id", type: "varchar", length: 64, unique: true },
+    requestId: {
+      name: "request_id",
+      type: "varchar",
+      length: 64,
+      unique: true,
+    },
     status: { type: "varchar", length: 16 },
     fullName: { name: "full_name", type: "varchar", length: 120 },
     phone: { type: "varchar", length: 120 },
     city: { type: "varchar", length: 120, nullable: true },
     licenseNumber: { name: "license_number", type: "varchar", length: 120 },
-    licenseIssueDate: { name: "license_issue_date", type: "varchar", length: 10 },
-    licenseExpiryDate: { name: "license_expiry_date", type: "varchar", length: 10 },
+    licenseIssueDate: {
+      name: "license_issue_date",
+      type: "varchar",
+      length: 10,
+    },
+    licenseExpiryDate: {
+      name: "license_expiry_date",
+      type: "varchar",
+      length: 10,
+    },
     carMake: { name: "car_make", type: "varchar", length: 120, nullable: true },
-    carModel: { name: "car_model", type: "varchar", length: 120, nullable: true },
+    carModel: {
+      name: "car_model",
+      type: "varchar",
+      length: 120,
+      nullable: true,
+    },
     carYear: { name: "car_year", type: "varchar", length: 4, nullable: true },
-    carColor: { name: "car_color", type: "varchar", length: 120, nullable: true },
+    carColor: {
+      name: "car_color",
+      type: "varchar",
+      length: 120,
+      nullable: true,
+    },
     vinCode: { name: "vin_code", type: "varchar", length: 120, nullable: true },
-    carNumber: { name: "car_number", type: "varchar", length: 120, nullable: true },
+    carNumber: {
+      name: "car_number",
+      type: "varchar",
+      length: 120,
+      nullable: true,
+    },
     tariff: { type: "varchar", length: 32, nullable: true },
-    fleetProfileId: { name: "fleet_profile_id", type: "varchar", length: 100, nullable: true },
+    fleetProfileId: {
+      name: "fleet_profile_id",
+      type: "varchar",
+      length: 100,
+      nullable: true,
+    },
     error: { type: "text", nullable: true },
     createdAt: { name: "created_at", type: "datetime", createDate: true },
     updatedAt: { name: "updated_at", type: "datetime", updateDate: true },
@@ -215,12 +259,10 @@ export type SeoText = { title: string; description: string };
 export type SeoSettings = {
   siteUrl: string;
   siteName: string;
-  /** Sharing image for every language; empty uses the built-in one for each language. */
   ogImage: string;
   googleVerification: string;
   bingVerification: string;
   yandexVerification: string;
-  /** False hides the whole site from search engines. */
   indexing: boolean;
   hiddenPages: SeoPageKey[];
   pages: Record<SeoPageKey, Record<"ka" | "en" | "ru", SeoText>>;
@@ -228,12 +270,9 @@ export type SeoSettings = {
 
 export interface SiteSettings {
   id: number;
-  /** Which city's official car list the site uses. */
   carListCity: string;
-  /** Privacy policy text; null until an admin saves it, and the built-in text applies. */
   privacy: PrivacyContent | null;
   privacyUpdatedAt: Date | null;
-  /** Null until an admin saves it, and the built-in texts apply. */
   seo: SeoSettings | null;
 }
 
@@ -244,7 +283,11 @@ export const SiteSettingsEntity = new EntitySchema<SiteSettings>({
     id: { type: "int", primary: true },
     carListCity: { name: "car_list_city", type: "varchar", length: 32 },
     privacy: { type: "json", nullable: true },
-    privacyUpdatedAt: { name: "privacy_updated_at", type: "datetime", nullable: true },
+    privacyUpdatedAt: {
+      name: "privacy_updated_at",
+      type: "datetime",
+      nullable: true,
+    },
     seo: { type: "json", nullable: true },
   },
 });
@@ -274,7 +317,6 @@ export const AdminUserEntity = new EntitySchema<AdminUser>({
 });
 
 export interface AdminSession {
-  /** SHA-256 of the cookie's token, so a database leak does not expose live sessions. */
   tokenHash: string;
   userId: number;
   expiresAt: Date;

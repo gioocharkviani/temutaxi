@@ -17,7 +17,7 @@ const PAGES: { key: SeoPageKey; label: string }[] = [
   { key: "home", label: "მთავარი გვერდი" },
   { key: "register", label: "რეგისტრაცია" },
   { key: "tariffs", label: "ტარიფები" },
-  { key: "rating", label: "რეიტინგი" },
+  { key: "rating", label: "ლიდერბორდი" },
   { key: "privacy", label: "Privacy Policy" },
 ];
 

@@ -85,6 +85,12 @@ export async function getPublicTop(settings: RatingSettings, count: number) {
   return rating && { rows: rating.visible.slice(0, count).map((row) => toPublicRow(row, settings)), syncedAt: rating.syncedAt };
 }
 
+/** Whether any stored driver has a phone, so the page can offer phone search. */
+export async function hasStoredPhones() {
+  const db = await getDb();
+  return db.getRepository(RatingDriverEntity).createQueryBuilder("d").where("d.phones IS NOT NULL").getExists();
+}
+
 const MAX_SEARCH_RESULTS = 10;
 
 /** Matches against the full name, but shows the name only in the form the admin chose. */

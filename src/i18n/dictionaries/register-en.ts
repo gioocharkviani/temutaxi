@@ -29,7 +29,7 @@ const registerEn = {
   colors: {
     white: "White",
     black: "Black",
-    gray: "Gray",
+    gray: "Grey",
     blue: "Blue",
     lightBlue: "Light blue",
     red: "Red",
@@ -59,7 +59,7 @@ const registerEn = {
     required: "Please fill in this field.",
     fullName: "Enter both your first name and last name.",
     phone: "Check the phone number, for example 5XX XX XX XX or +995 5XX XX XX XX.",
-    date: "Enter a real date as DD.MM.YYYY.",
+    date: "Enter a valid date in the format DD.MM.YYYY.",
     expiryOrder: "The expiry date must be after the date of issue.",
     /** {max} is replaced */
     year: "Enter a year between 1950 and {max}.",
@@ -69,9 +69,9 @@ const registerEn = {
   },
   consent: "I agree to the processing of my personal data for this registration.",
   consentLink: "Read the privacy policy",
-  submit: "Send registration",
+  submit: "Send application",
   sending: "Sending…",
-  sendError: "Your registration could not be sent. Check your connection and try again, or message our manager.",
+  sendError: "Your application could not be sent. Check your connection and try again, or message our manager.",
   messageManager: "Message the manager",
   summary: {
     title: "Your application",
@@ -82,8 +82,8 @@ const registerEn = {
     help: "Need help? Write to us on WhatsApp.",
   },
   success: {
-    title: "Registration received",
-    body: "Congratulations! You have successfully completed your registration. We will contact you shortly.",
+    title: "Application received",
+    body: "Thank you! Your application has been received. Our manager will contact you shortly about the next steps.",
     home: "Back to the home page",
   },
 };

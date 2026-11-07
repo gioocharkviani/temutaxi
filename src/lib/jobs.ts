@@ -6,8 +6,9 @@ import { getDb } from "@/db/data-source";
 import { JobRunEntity, RatingDriverEntity, RatingSettingsEntity, type JobRun, type JobType, type RatingDriver } from "@/db/entities";
 import { AUTO_LIST_CITIES, fetchAutoList } from "./auto-list";
 import { saveCarLists } from "./auto-list-store";
-import { FleetApiError, listCompletedOrders } from "./fleet";
+import { FleetApiError, listCompletedOrders, listDriverPhones } from "./fleet";
 import { getPeriodRange } from "./rating/period";
+import { phoneKey } from "./rating/ranking";
 import { isSyncDue, periodKey } from "./rating/schedule";
 import { getRatingSettings } from "./rating/service";
 import { RATING_CATEGORIES } from "./rating/settings-schema";
@@ -81,13 +82,38 @@ export async function runRatingSync(jobId: number) {
       const key = `${driverId}:${order.category}`;
       const row = rows.get(key);
       if (!row) {
-        rows.set(key, { driverId, category: order.category, driverName: order.driver_profile?.name ?? "", orders: 1, lastOrderAt: endedAt });
+        rows.set(key, { driverId, category: order.category, driverName: order.driver_profile?.name ?? "", orders: 1, lastOrderAt: endedAt, phones: null });
         continue;
       }
       row.orders++;
       if (endedAt >= row.lastOrderAt) {
         row.lastOrderAt = endedAt;
         row.driverName = order.driver_profile?.name || row.driverName;
+      }
+    }
+
+    // Phones are optional: without permission to read drivers, the leaderboard still updates.
+    let phoneNote = "";
+    if (rows.size > 0) {
+      try {
+        const phones = await listDriverPhones();
+        let found = 0;
+        const counted = new Set<string>();
+        for (const row of rows.values()) {
+          const keys = [...new Set((phones.get(row.driverId) ?? []).map(phoneKey).filter(Boolean))];
+          row.phones = keys.length ? keys.join(",").slice(0, 255) : null;
+          if (keys.length && !counted.has(row.driverId)) {
+            counted.add(row.driverId);
+            found++;
+          }
+        }
+        phoneNote = ` · ტელეფონი: ${found} მძღოლი`;
+      } catch (error) {
+        console.error("Driver phones could not be read", error);
+        phoneNote =
+          error instanceof FleetApiError && error.status === 403
+            ? " · ტელეფონები ვერ წამოვიღეთ: API გასაღებს მძღოლების სიის წაკითხვის უფლება არ აქვს (403)"
+            : ` · ტელეფონები ვერ წამოვიღეთ: ${explainFailure(error)}`;
       }
     }
 
@@ -105,7 +131,7 @@ export async function runRatingSync(jobId: number) {
       });
     });
 
-    await finishJob(jobId, { status: "success", items: rows.size, message: `დამუშავდა ${seen.size} შეკვეთა` });
+    await finishJob(jobId, { status: "success", items: rows.size, message: `დამუშავდა ${seen.size} შეკვეთა${phoneNote}` });
     await db.getRepository(JobRunEntity).delete({ type: "rating_sync", startedAt: LessThan(new Date(Date.now() - KEEP_RATING_JOBS_MS)) });
   } catch (error) {
     console.error("Rating update failed", error);

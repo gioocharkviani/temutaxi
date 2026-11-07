@@ -49,7 +49,7 @@ export async function Rating({ t, lang }: { t: Dictionary["rating"]; lang: Local
 
           <div className="mt-7 flex flex-wrap gap-3">
             <Link
-              href={`/${lang}/rating`}
+              href={`/${lang}/leaderboard`}
               className="inline-flex h-12 items-center gap-2 rounded-2xl bg-brand px-6 font-semibold text-ink transition hover:bg-brand-hover"
             >
               {t.details}
@@ -66,7 +66,7 @@ export async function Rating({ t, lang }: { t: Dictionary["rating"]; lang: Local
 
         {showDrivers && (
           <Suspense fallback={<RatingListSkeleton count={settings.landingCount} tone="dark" label={t.loading} />}>
-            <TopDrivers settings={settings} t={t} />
+            <TopDrivers settings={settings} t={t} lang={lang} />
           </Suspense>
         )}
       </div>
@@ -74,7 +74,7 @@ export async function Rating({ t, lang }: { t: Dictionary["rating"]; lang: Local
   );
 }
 
-async function TopDrivers({ settings, t }: { settings: RatingSettings; t: Dictionary["rating"] }) {
+async function TopDrivers({ settings, t, lang }: { settings: RatingSettings; t: Dictionary["rating"]; lang: Locale }) {
   const top = await getPublicTop(settings, settings.landingCount).catch((error) => {
     console.error("Rating could not be read", error);
     return null;
@@ -83,5 +83,5 @@ async function TopDrivers({ settings, t }: { settings: RatingSettings; t: Dictio
   if (!top) return <p className="self-center rounded-2xl bg-dark-2 p-6 text-on-dark-muted">{t.unavailable}</p>;
   if (top.rows.length === 0) return <p className="self-center rounded-2xl bg-dark-2 p-6 text-on-dark-muted">{t.empty}</p>;
 
-  return <RatingList rows={top.rows} showScores={settings.showScores} ordersLabel={t.orders} tone="dark" />;
+  return <RatingList rows={top.rows} showScores={settings.showScores} orders={t.orders} lang={lang} tone="dark" />;
 }

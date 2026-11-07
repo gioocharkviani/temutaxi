@@ -1,15 +1,19 @@
+import type { Locale } from "@/i18n/config";
+import { plural, type PluralForms } from "@/i18n/plural";
 import type { PublicRow } from "@/lib/rating/service";
 
 /** The ranked rows, used on the dark landing section and the light rating page. */
 export function RatingList({
   rows,
   showScores,
-  ordersLabel,
+  orders,
+  lang,
   tone,
 }: {
   rows: PublicRow[];
   showScores: boolean;
-  ordersLabel: string;
+  orders: PluralForms;
+  lang: Locale;
   tone: "dark" | "light";
 }) {
   const leaderScore = rows[0]?.score ?? 0;
@@ -47,7 +51,7 @@ export function RatingList({
               {showScores && (
                 <span className="shrink-0 text-right">
                   <strong className={`font-display tabular-nums ${podium ? "text-2xl" : "text-lg"}`}>{row.score}</strong>{" "}
-                  <span className={`text-xs ${first ? "text-ink-2" : quiet}`}>{ordersLabel}</span>
+                  <span className={`text-xs ${first ? "text-ink-2" : quiet}`}>{plural(orders, row.score, lang)}</span>
                 </span>
               )}
             </div>
