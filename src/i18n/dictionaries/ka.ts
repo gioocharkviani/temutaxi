@@ -142,6 +142,7 @@ const ka: Dictionary = {
     disclaimer: "ამ ვებგვერდს მართავს Company LLC. ის არ არის Yandex Go-ს ოფიციალური ვებგვერდი.",
     policy: "კონფიდენციალურობის პოლიტიკა",
     rights: "ყველა უფლება დაცულია.",
+    madeBy: "საიტი დაამზადა",
     navTitle: "ნავიგაცია",
     contactTitle: "კონტაქტი",
   },

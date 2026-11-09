@@ -142,6 +142,7 @@ const ru: Dictionary = {
     disclaimer: "Сайтом управляет Company LLC. Он не является официальным сайтом Yandex Go.",
     policy: "Политика конфиденциальности",
     rights: "Все права защищены.",
+    madeBy: "Сайт разработан",
     navTitle: "Навигация",
     contactTitle: "Контакты",
   },

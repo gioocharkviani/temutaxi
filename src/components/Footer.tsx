@@ -57,7 +57,15 @@ export function Footer({ lang, t, nav }: { lang: Locale; t: Dictionary["footer"]
       <div className="border-t border-dark-2">
         <div className="mx-auto flex max-w-site flex-col gap-3 px-4 py-6 text-xs text-faint sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
           <p>{t.disclaimer}</p>
-          <p className="shrink-0">© {site.copyrightYear} {site.company.name}. {t.rights}</p>
+          <div className="flex shrink-0 flex-col gap-1 md:items-end">
+            <p>© {site.copyrightYear} {site.company.name}. {t.rights}</p>
+            <p>
+              {t.madeBy}{" "}
+              <a href="https://bytz.ge" target="_blank" rel="noopener" className="font-semibold text-on-dark-muted transition hover:text-brand">
+                bytz.ge
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </footer>

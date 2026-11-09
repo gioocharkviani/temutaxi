@@ -142,6 +142,7 @@ const en = {
     disclaimer: "This website is operated by Company LLC and is not the official website of Yandex Go.",
     policy: "Privacy policy",
     rights: "All rights reserved.",
+    madeBy: "Website by",
     navTitle: "Navigation",
     contactTitle: "Contact",
   },
