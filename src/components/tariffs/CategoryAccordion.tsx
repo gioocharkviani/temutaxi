@@ -111,7 +111,7 @@ export function CategoryAccordion({ t, cars }: { t: AccordionText; cars: CarMode
                     </label>
                   </div>
 
-                  <div className="mt-4 max-h-[440px] overflow-y-auto rounded-2xl border border-line-soft [scrollbar-width:thin]">
+                  <div className="mt-4 max-h-[440px] overflow-y-auto rounded-2xl border border-line-soft">
                     <table className="w-full border-collapse text-left text-sm">
                       <thead className="sticky top-0 z-10 bg-surface-2">
                         <tr>

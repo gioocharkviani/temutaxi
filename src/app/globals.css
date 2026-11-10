@@ -60,6 +60,54 @@ h3 {
   border-radius: 8px;
 }
 
+/* Scrollbars in the site's colours: a dark rounded thumb on a light track, yellow while dragged.
+   Chrome, Edge and Safari use the ::-webkit-scrollbar rules (they allow rounded thumbs); Firefox only
+   supports colour and width, so the standard properties are given to Firefox alone. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+html::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+html::-webkit-scrollbar-track {
+  background: var(--color-surface-2);
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-faint);
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+html::-webkit-scrollbar-thumb {
+  background-color: var(--color-ink-2);
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-ink);
+}
+::-webkit-scrollbar-thumb:active {
+  background-color: var(--color-brand-press);
+}
+@supports (-moz-appearance: none) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-faint) transparent;
+  }
+  html {
+    scrollbar-width: auto;
+    scrollbar-color: var(--color-ink-2) var(--color-surface-2);
+  }
+}
+
+::selection {
+  background: var(--color-brand);
+  color: var(--color-ink);
+}
+
 /* Georgian has no capital letters, so wide letter-spacing on small labels only hurts readability. */
 :lang(ka) [class*="tracking-[0.1"] {
   letter-spacing: 0.02em;
