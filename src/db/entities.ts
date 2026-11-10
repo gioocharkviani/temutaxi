@@ -186,6 +186,8 @@ export interface Registration {
   carNumber: string | null;
   tariff: string | null;
   fleetProfileId: string | null;
+  /** Phone number of whoever referred this driver, as +995XXXXXXXXX. Kept here only, never sent to Yandex. */
+  referrerPhone: string | null;
   error: string | null;
   createdAt: Date;
   updatedAt: Date;
@@ -245,6 +247,7 @@ export const RegistrationEntity = new EntitySchema<Registration>({
       length: 100,
       nullable: true,
     },
+    referrerPhone: { name: "referrer_phone", type: "varchar", length: 32, nullable: true },
     error: { type: "text", nullable: true },
     createdAt: { name: "created_at", type: "datetime", createDate: true },
     updatedAt: { name: "updated_at", type: "datetime", updateDate: true },
@@ -324,12 +327,19 @@ export const PromotionEntity = new EntitySchema<Promotion>({
   },
 });
 
+export type MailSettings = { enabled: boolean; recipients: string[] };
+export type MailResult = { at: string; ok: boolean; message: string };
+
 export interface SiteSettings {
   id: number;
   carListCity: string;
   privacy: PrivacyContent | null;
   privacyUpdatedAt: Date | null;
   seo: SeoSettings | null;
+  /** Who gets an e-mail about each new application. */
+  mail: MailSettings | null;
+  /** The latest send, for the admin panel. */
+  mailLast: MailResult | null;
 }
 
 export const SiteSettingsEntity = new EntitySchema<SiteSettings>({
@@ -345,6 +355,8 @@ export const SiteSettingsEntity = new EntitySchema<SiteSettings>({
       nullable: true,
     },
     seo: { type: "json", nullable: true },
+    mail: { type: "json", nullable: true },
+    mailLast: { name: "mail_last", type: "json", nullable: true },
   },
 });
 

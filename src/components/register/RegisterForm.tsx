@@ -42,6 +42,7 @@ const fieldOrder: RegistrationField[] = [
   "car-color",
   "vin-code",
   "car-number",
+  "referrer-phone",
   "tariff",
   "consent",
 ];
@@ -53,11 +54,14 @@ const inputClass = (invalid: boolean) =>
 
 /** Pre-fills the car when arriving from the "check your car" tool. */
 function initialValues(params: { get(name: string): string | null }, cars: CarModel[]): RegistrationValues {
+  // A referral link (/register?ref=599123456) fills in who referred the driver.
+  const referrer = (params.get("ref") ?? "").replace(/[^\d+\s()-]/g, "").slice(0, 24);
+  const base = { ...emptyRegistration, "referrer-phone": referrer };
   const car = findCar(cars, params.get("brand") ?? "", params.get("model") ?? "");
-  if (!car) return emptyRegistration;
+  if (!car) return base;
   const year = params.get("year") ?? "";
   return {
-    ...emptyRegistration,
+    ...base,
     "car-make": car.brand,
     "car-model": car.model,
     "car-year": years.includes(year) ? year : "",
@@ -205,6 +209,17 @@ export function RegisterForm({
                 placeholder={t.fields.city.placeholder}
                 onChange={(v) => set("city", v.slice(0, 120))}
               />
+            </Field>
+            <Field field="referrer-phone" t={t} error={errorFor("referrer-phone")} className="sm:col-span-2">
+              <input
+                {...inputProps("referrer-phone")}
+                type="tel"
+                autoComplete="off"
+                maxLength={24}
+                aria-describedby={`${fieldId("referrer-phone")}-hint`}
+                onChange={(e) => set("referrer-phone", e.target.value.replace(/[^\d+\s()-]/g, ""))}
+              />
+              <p id={`${fieldId("referrer-phone")}-hint`} className="mt-2 text-xs leading-relaxed text-muted">{t.referralHint}</p>
             </Field>
           </div>
         </Section>

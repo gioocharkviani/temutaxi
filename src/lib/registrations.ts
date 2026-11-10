@@ -1,7 +1,7 @@
 import "server-only";
 import { getDb } from "@/db/data-source";
 import { RegistrationEntity } from "@/db/entities";
-import type { RegistrationValues } from "./registration";
+import { toE164, type RegistrationValues } from "./registration";
 
 const orNull = (value: string) => value.trim() || null;
 
@@ -31,6 +31,7 @@ export async function saveRegistration(v: RegistrationValues, tariff: string, re
     vinCode: orNull(v["vin-code"]),
     carNumber: orNull(v["car-number"]),
     tariff: orNull(tariff),
+    referrerPhone: v["referrer-phone"].trim() ? toE164(v["referrer-phone"]) : null,
     error: null,
   };
 
@@ -52,9 +53,23 @@ export async function markRegistrationFailed(id: number, error: string) {
   await db.getRepository(RegistrationEntity).update(id, { status: "failed", error });
 }
 
-export async function getRecentRegistrations(limit = 50) {
+export async function getRecentRegistrations(limit = 50, onlyReferrals = false) {
   const db = await getDb();
-  return db.getRepository(RegistrationEntity).find({ order: { id: "DESC" }, take: limit });
+  const query = db.getRepository(RegistrationEntity).createQueryBuilder("r").orderBy("r.id", "DESC").take(limit);
+  if (onlyReferrals) query.where("r.referrer_phone IS NOT NULL");
+  return query.getMany();
+}
+
+/** Who referred most drivers, best first. */
+export async function getTopReferrers(limit = 10): Promise<{ phone: string; count: number; sent: number }[]> {
+  const db = await getDb();
+  const rows: { phone: string; count: string; sent: string }[] = await db.query(
+    `SELECT referrer_phone AS phone, COUNT(*) AS count, SUM(status = 'sent') AS sent
+     FROM registrations WHERE referrer_phone IS NOT NULL
+     GROUP BY referrer_phone ORDER BY count DESC, phone ASC LIMIT ?`,
+    [limit],
+  );
+  return rows.map((r) => ({ phone: r.phone, count: Number(r.count), sent: Number(r.sent) }));
 }
 
 export async function deleteRegistration(id: number) {

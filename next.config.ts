@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ["typeorm", "mysql2"],
+  serverExternalPackages: ["typeorm", "mysql2", "nodemailer"],
   cacheComponents: true,
   // The page was called "rating" before; old links and search results keep working.
   async redirects() {

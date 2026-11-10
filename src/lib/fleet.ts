@@ -1,7 +1,7 @@
 // Talks to the Yandex Fleet API. Server only, because it uses the secret keys from .env.
 
 import "server-only";
-import type { RegistrationValues } from "./registration";
+import { toE164, type RegistrationValues } from "./registration";
 
 const LICENCE_COUNTRY = "geo";
 const TIMEOUT_MS = 15_000;
@@ -184,11 +184,6 @@ function pickWorkRule(rules: WorkRule[]) {
 /** DD.MM.YYYY (form) to YYYY-MM-DD (API). */
 const toIsoDate = (value: string) => value.split(".").reverse().join("-");
 
-/** Any accepted form of a Georgian number to the API's +995XXXXXXXXX. */
-const toE164 = (phone: string) => {
-  const digits = phone.replace(/\D/g, "");
-  return `+${digits.startsWith("995") ? digits : `995${digits}`}`;
-};
 
 /** Today in Georgia, whatever time zone the server runs in. */
 const todayInTbilisi = () =>

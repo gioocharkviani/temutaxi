@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState, type ReactNode } from "react";
+import { useActionState, useState, useTransition, type ReactNode } from "react";
 import { saveSettingsAction } from "@/app/admin/actions";
 import type { NameDisplay, PeriodMode, RatingContent, RatingSettings, RatingText, SyncSchedule, TieBreak } from "@/db/entities";
 import { RATING_CATEGORIES } from "@/lib/rating/settings-schema";
@@ -16,6 +16,7 @@ const LANGUAGES: { code: keyof RatingContent; label: string }[] = [
 
 export function SettingsForm({ settings }: { settings: FormSettings }) {
   const [state, action, pending] = useActionState(saveSettingsAction, {});
+  const [, startTransition] = useTransition();
   const [language, setLanguage] = useState<keyof RatingContent>("ka");
   const [values, setValues] = useState({
     ...settings,
@@ -31,7 +32,11 @@ export function SettingsForm({ settings }: { settings: FormSettings }) {
   const languageHasError = (lang: string) => Object.keys(state.errors ?? {}).some((key) => key.startsWith(`content.${lang}.`));
 
   return (
-    <form noValidate action={action} className={`${adminCard} space-y-7`}>
+    <form noValidate onSubmit={(e) => {
+        e.preventDefault();
+        const data = new FormData(e.currentTarget);
+        startTransition(() => action(data));
+      }} className={`${adminCard} space-y-7`}>
       <label className="flex items-center justify-between gap-4 rounded-2xl bg-surface-2 p-4">
         <span>
           <span className="block font-semibold">რეიტინგი საიტზე</span>

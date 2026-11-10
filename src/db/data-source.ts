@@ -19,6 +19,7 @@ import { SeoAndStoredDataTerms1762800000000 } from "./migrations/1762800000000-S
 import { LeaderboardAndPhones1762900000000 } from "./migrations/1762900000000-LeaderboardAndPhones";
 import { Promotions1763000000000 } from "./migrations/1763000000000-Promotions";
 import { PromotionStoreButtons1763100000000 } from "./migrations/1763100000000-PromotionStoreButtons";
+import { ReferralsAndMail1763200000000 } from "./migrations/1763200000000-ReferralsAndMail";
 
 function createDataSource() {
   return new DataSource({
@@ -48,6 +49,7 @@ function createDataSource() {
       LeaderboardAndPhones1762900000000,
       Promotions1763000000000,
       PromotionStoreButtons1763100000000,
+      ReferralsAndMail1763200000000,
     ],
   });
 }

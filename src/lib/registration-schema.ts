@@ -22,7 +22,8 @@ export type RegistrationError =
   | "year"
   | "color"
   | "tariff"
-  | "consent";
+  | "consent"
+  | "referrerSelf";
 export type RegistrationErrors = Partial<Record<RegistrationField, RegistrationError>>;
 
 // Zod messages are used as the error codes; this makes a mistyped code fail the build.
@@ -55,6 +56,7 @@ const fieldsSchema = z.object({
   "car-year": z.string().refine((s) => !s || isValidYear(s), code("year")),
   "car-color": z.string().refine((s) => !s || carColors.some((c) => c.value === s), code("color")),
   consent: z.boolean().refine(Boolean, code("consent")),
+  "referrer-phone": z.string().refine((s) => !s.trim() || isValidPhone(s), code("phone")),
 });
 
 // Rules across fields. A separate schema because Zod skips an object's refinements while any of its
@@ -64,6 +66,12 @@ const crossFieldSchema = (cars: CarModel[]) => z.custom<RegistrationValues>().su
   const expiry = parseDate(v["expiration-date"]);
   if (issue !== null && expiry !== null && expiry <= issue) {
     ctx.addIssue({ code: "custom", path: ["expiration-date"], message: code("expiryOrder") });
+  }
+
+  // Referring yourself is not a referral.
+  const digits = (s: string) => s.replace(/\D/g, "").slice(-9);
+  if (v["referrer-phone"].trim() && digits(v["referrer-phone"]) === digits(v["user-phone"])) {
+    ctx.addIssue({ code: "custom", path: ["referrer-phone"], message: code("referrerSelf") });
   }
 
   const state = getTariffState(v, cars);

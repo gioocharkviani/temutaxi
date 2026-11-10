@@ -27,6 +27,7 @@ const registerRu: RegisterDictionary = {
     "car-color": { label: "Цвет", placeholder: "" },
     "vin-code": { label: "VIN-код", placeholder: "1HGBH41JXMN109186" },
     "car-number": { label: "Государственный номер", placeholder: "AB-123-CD" },
+    "referrer-phone": { label: "Телефон пригласившего (необязательно)", placeholder: "+995 5XX XX XX XX" },
   },
   colors: {
     white: "Белый",
@@ -65,7 +66,9 @@ const registerRu: RegisterDictionary = {
     color: "Выберите цвет из списка.",
     tariff: "Выберите один из доступных тарифов.",
     consent: "Подтвердите согласие, чтобы продолжить.",
+    referrerSelf: "Номер пригласившего должен отличаться от вашего.",
   },
+  referralHint: "Если вас кто-то пригласил, укажите его номер. Он хранится только у нас и не передаётся в Яндекс.",
   consent: "Даю согласие на обработку моих персональных данных для этой регистрации.",
   consentLink: "Политика конфиденциальности",
   submit: "Отправить заявку",

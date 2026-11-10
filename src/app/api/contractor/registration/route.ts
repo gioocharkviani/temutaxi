@@ -1,4 +1,6 @@
+import { after } from "next/server";
 import { getCars } from "@/lib/cars";
+import { sendRegistrationEmail } from "@/lib/mail";
 import { createDriverProfile } from "@/lib/fleet";
 import { effectiveTariff, getTariffState } from "@/lib/registration";
 import { parseRegistration, validateRegistration } from "@/lib/registration-schema";
@@ -40,6 +42,8 @@ export async function POST(request: Request) {
 
   // 4. Create the driver in Yandex.
   const result = await createDriverProfile(values, tariff, token);
+  // Admins hear about every application, also the ones Yandex refused.
+  after(() => sendRegistrationEmail(saved.id));
   if (!result.ok) {
     await markRegistrationFailed(saved.id, result.detail ?? result.reason);
     return Response.json({ error: result.reason }, { status: STATUS[result.reason] });

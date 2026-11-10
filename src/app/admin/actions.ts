@@ -8,6 +8,8 @@ import { AUTO_LIST_CITIES } from "@/lib/auto-list";
 import { saveCarListCity } from "@/lib/cars";
 import type { Locale } from "@/i18n/config";
 import { savePrivacyContent } from "@/lib/privacy";
+import { getMailSettings, saveMailSettings, sendTestEmail } from "@/lib/mail";
+import { z } from "zod";
 import { promotionSchema } from "@/lib/promotion-schema";
 import { deletePromotion, getPromotion, savePromotion, setPromotionEnabled } from "@/lib/promotions";
 import { saveSeo, SEO_TAG } from "@/lib/seo";
@@ -241,6 +243,38 @@ export async function deletePromotionAction(form: FormData) {
   const id = Number(text(form, "id"));
   if (Number.isInteger(id) && id > 0) await deletePromotion(id);
   revalidateAdmin();
+}
+
+export type MailState = { error?: string; saved?: boolean };
+
+const emailList = z
+  .array(z.string().trim().toLowerCase())
+  .transform((list) => [...new Set(list.filter(Boolean))])
+  .pipe(z.array(z.email("არასწორი მისამართი")).max(10, "მაქსიმუმ 10 მიმღები"));
+
+export async function saveMailAction(_: MailState, form: FormData): Promise<MailState> {
+  await requireAdmin();
+  const recipients = emailList.safeParse(form.getAll("recipients").map(String));
+  if (!recipients.success) {
+    const bad = form.getAll("recipients").map(String).find((e) => e.trim() && !z.email().safeParse(e.trim()).success);
+    return { error: bad ? `არასწორი მისამართი: ${bad}` : recipients.error.issues[0].message };
+  }
+  const enabled = form.get("enabled") === "on";
+  if (enabled && recipients.data.length === 0) return { error: "ჩართვისთვის დაამატე მინიმუმ ერთი მიმღები." };
+  await saveMailSettings({ enabled, recipients: recipients.data });
+  revalidateAdmin();
+  return { saved: true };
+}
+
+export type TestMailState = { error?: string; sent?: boolean };
+
+export async function sendTestMailAction(): Promise<TestMailState> {
+  await requireAdmin();
+  const { settings } = await getMailSettings();
+  if (settings.recipients.length === 0) return { error: "ჯერ დაამატე და შეინახე მიმღები." };
+  const error = await sendTestEmail(settings.recipients);
+  revalidateAdmin();
+  return error ? { error: `ვერ გაიგზავნა: ${error}` } : { sent: true };
 }
 
 export type PasswordState = { error?: string; saved?: boolean };

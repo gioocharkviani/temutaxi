@@ -17,6 +17,8 @@ export const textFields = [
   "car-color",
   "vin-code",
   "car-number",
+  // Who referred the driver. Stored by us only: fleet.ts sends Yandex an explicit list of fields without it.
+  "referrer-phone",
 ] as const;
 
 export type TextField = (typeof textFields)[number];
@@ -36,8 +38,15 @@ export const emptyRegistration: RegistrationValues = {
   "car-color": "",
   "vin-code": "",
   "car-number": "",
+  "referrer-phone": "",
   tariff: "",
   consent: false,
+};
+
+/** Any accepted form of a Georgian mobile number to +995XXXXXXXXX. */
+export const toE164 = (phone: string) => {
+  const digits = phone.replace(/\D/g, "");
+  return `+${digits.startsWith("995") ? digits : `995${digits}`}`;
 };
 
 /** Formats typed digits as DD.MM.YYYY. */

@@ -25,6 +25,7 @@ const registerEn = {
     "car-color": { label: "Colour", placeholder: "" },
     "vin-code": { label: "VIN code", placeholder: "1HGBH41JXMN109186" },
     "car-number": { label: "Plate number", placeholder: "AB-123-CD" },
+    "referrer-phone": { label: "Referrer's phone number (optional)", placeholder: "+995 5XX XX XX XX" },
   },
   colors: {
     white: "White",
@@ -66,7 +67,9 @@ const registerEn = {
     color: "Choose a colour from the list.",
     tariff: "Choose one of the available tariffs.",
     consent: "Please confirm your consent to continue.",
+    referrerSelf: "The referrer's number must be different from yours.",
   },
+  referralHint: "If someone referred you, enter their number. It is kept by us only and is not sent to Yandex.",
   consent: "I agree to the processing of my personal data for this registration.",
   consentLink: "Read the privacy policy",
   submit: "Send application",

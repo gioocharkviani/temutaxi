@@ -9,6 +9,7 @@ const PAGES = [
   { href: "/admin/privacy", label: "Privacy Policy" },
   { href: "/admin/promotions", label: "პრომოუშენები" },
   { href: "/admin/seo", label: "SEO" },
+  { href: "/admin/email", label: "ელფოსტა" },
   { href: "/admin/cars", label: "მანქანების სია" },
   { href: "/admin/password", label: "პაროლი" },
 ];
