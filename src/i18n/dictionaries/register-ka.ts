@@ -27,7 +27,7 @@ const registerKa: RegisterDictionary = {
     "car-color": { label: "ფერი", placeholder: "" },
     "vin-code": { label: "VIN კოდი", placeholder: "1HGBH41JXMN109186" },
     "car-number": { label: "სახელმწიფო ნომერი", placeholder: "AB-123-CD" },
-    "referrer-phone": { label: "მომწვევის ტელეფონის ნომერი (სურვილისამებრ)", placeholder: "+995 5XX XX XX XX" },
+    "referrer-phone": { label: "რეფერალის ტელეფონის ნომერი (სურვილისამებრ)", placeholder: "+995 5XX XX XX XX" },
   },
   colors: {
     white: "თეთრი",
@@ -66,7 +66,7 @@ const registerKa: RegisterDictionary = {
     color: "აირჩიეთ ფერი სიიდან.",
     tariff: "აირჩიეთ ერთ-ერთი ხელმისაწვდომი ტარიფი.",
     consent: "გასაგრძელებლად დაადასტურეთ თანხმობა.",
-    referrerSelf: "მომწვევის ნომერი თქვენი ნომრისგან განსხვავებული უნდა იყოს.",
+    referrerSelf: "რეფერალის ნომერი თქვენი ნომრისგან განსხვავებული უნდა იყოს.",
   },
   referralHint: "თუ ვინმემ მოგიწვიათ, ჩაწერეთ მისი ნომერი. ეს ინფორმაცია მხოლოდ ჩვენთან ინახება და Yandex-ს არ გადაეცემა.",
   consent: "ვეთანხმები ჩემი პერსონალური მონაცემების დამუშავებას ამ რეგისტრაციისთვის.",

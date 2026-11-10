@@ -43,6 +43,9 @@ export function Header({ lang, nav, showRating }: { lang: Locale; nav: Dictionar
   const links = [
     { href: `/${lang}/tariffs`, label: nav.tariffs },
     ...(showRating ? [{ href: `/${lang}/leaderboard`, label: nav.rating }] : []),
+    { href: `/${lang}/referral`, label: nav.referral },
+    // The app links are in the footer of every page, so this works wherever the visitor is.
+    { href: "#download-app", label: nav.download },
   ];
   const isActive = (href: string) => pathname === href;
 

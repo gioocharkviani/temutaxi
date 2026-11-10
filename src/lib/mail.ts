@@ -70,7 +70,7 @@ function registrationRows(r: Registration): [string, string][] {
     ["მანქანა", [r.carMake, r.carModel, r.carYear].filter(Boolean).join(" ")],
     ["ფერი / ნომერი / VIN", [r.carColor, r.carNumber, r.vinCode].filter(Boolean).join(" · ")],
     ["ტარიფი", r.tariff ?? ""],
-    ["რეფერალი (მომწვევის ნომერი)", r.referrerPhone ?? "არა"],
+    ["რეფერალის ნომერი", r.referrerPhone ?? "არა"],
     ["სტატუსი", STATUS[r.status] + (r.error ? `: ${r.error}` : "")],
   ].filter(([, value]) => value) as [string, string][];
 }

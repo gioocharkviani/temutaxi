@@ -25,6 +25,7 @@ const privacyEn = {
         "Driving licence number, date of issue and expiry date",
         "Car brand, model, year, colour, plate number and VIN code",
         "The tariff you choose and your consent",
+        "The referrer's phone number, if you enter one. It is kept by us only and is not sent to Yandex",
       ],
       after: "We do not ask you to upload photos of documents on this form.",
     },

@@ -12,6 +12,7 @@ export function Footer({ lang, t, nav, apps }: { lang: Locale; t: Dictionary["fo
     { href: `/${lang}#benefits`, label: nav.benefits },
     { href: `/${lang}#steps`, label: nav.steps },
     { href: `/${lang}#faq`, label: nav.faq },
+    { href: `/${lang}/referral`, label: nav.referral },
   ];
 
   return (
@@ -52,8 +53,10 @@ export function Footer({ lang, t, nav, apps }: { lang: Locale; t: Dictionary["fo
             <li><a href={site.whatsapp.href} target="_blank" rel="noopener" className="transition hover:text-brand">WhatsApp: {site.whatsapp.display}</a></li>
             <li><a href={`mailto:${site.email}`} className="break-all transition hover:text-brand">{site.email}</a></li>
           </ul>
-          <p className="mt-8 text-sm font-semibold">{apps.title}</p>
-          <AppLinks t={apps} tone="dark" className="mt-4" />
+          <div id="download-app" className="scroll-mt-28">
+            <p className="mt-8 text-sm font-semibold">{apps.title}</p>
+            <AppLinks t={apps} tone="dark" className="mt-4" />
+          </div>
         </div>
       </div>
 

@@ -33,7 +33,7 @@ async function Registrations({ searchParams }: { searchParams: PageProps<"/admin
 
   return (
     <>
-      <PageTitle title="რეგისტრაციები" hint="ბოლო 50 განაცხადი. ინახება ბაზაში მაშინაც, თუ Yandex-მა უარი თქვა. მომწვევის ნომერი მხოლოდ აქ ინახება და Yandex-ს არ გადაეცემა." />
+      <PageTitle title="რეგისტრაციები" hint="ბოლო 50 განაცხადი. ინახება ბაზაში მაშინაც, თუ Yandex-მა უარი თქვა. რეფერალის ნომერი მხოლოდ აქ ინახება და Yandex-ს არ გადაეცემა." />
 
       <div className="flex flex-wrap gap-2">
         <Link href="/admin" className={tab(!onlyReferrals)}>ყველა</Link>
@@ -101,9 +101,9 @@ async function Registrations({ searchParams }: { searchParams: PageProps<"/admin
 
       <section className={`${adminCard} space-y-3`}>
         <div>
-          <h2 className="text-lg font-bold">მომწვევები</h2>
+          <h2 className="text-lg font-bold">რეფერალები</h2>
           <p className="mt-1 text-sm text-muted">
-            ვინ რამდენი მძღოლი მოიწვია. რეფერალური ბმული: <code className="rounded bg-surface-2 px-1.5 py-0.5">temutaxi.ge/register?ref=599123456</code>, ის მომწვევის ნომერს ფორმაში თავისით ჩაწერს.
+            ვინ რამდენი მძღოლი მოიწვია. რეფერალური ბმული: <code className="rounded bg-surface-2 px-1.5 py-0.5">temutaxi.ge/register?ref=599123456</code>, ის რეფერალის ნომერს ფორმაში თავისით ჩაწერს.
           </p>
         </div>
         {referrers.length === 0 ? (
@@ -112,7 +112,7 @@ async function Registrations({ searchParams }: { searchParams: PageProps<"/admin
           <table className="w-full max-w-xl text-left text-sm">
             <thead className="text-xs text-muted">
               <tr>
-                <th className="pb-2 font-medium">მომწვევის ნომერი</th>
+                <th className="pb-2 font-medium">რეფერალის ნომერი</th>
                 <th className="pb-2 font-medium">განაცხადი</th>
                 <th className="pb-2 font-medium">Yandex-ში შეიქმნა</th>
               </tr>
