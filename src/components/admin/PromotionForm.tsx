@@ -24,6 +24,7 @@ export type PromotionFormValues = {
   icon: string;
   link: string;
   newTab: boolean;
+  showApps: boolean;
   content: Record<Lang, PromotionText>;
   repeat: "session" | "hours";
   repeatHours: number;
@@ -34,6 +35,8 @@ const LANGUAGES: { code: Lang; label: string }[] = [
   { code: "en", label: "English" },
   { code: "ru", label: "Русский" },
 ];
+
+const PREVIEW_APPS = { appStore: "ჩამოტვირთეთ", googlePlay: "ჩამოტვირთეთ" };
 
 const COLOR_FIELDS: { key: keyof PromotionColors; label: string }[] = [
   { key: "background", label: "ფონი" },
@@ -63,6 +66,7 @@ export function PromotionForm({ initial }: { initial: PromotionFormValues }) {
     buttonText: pick("buttonText"),
     link: v.link || (pick("buttonText") ? "#" : null),
     newTab: false,
+    showApps: v.showApps,
   };
 
   return (
@@ -181,6 +185,16 @@ export function PromotionForm({ initial }: { initial: PromotionFormValues }) {
           </div>
         </section>
 
+        <section className={`${adminCard} space-y-3`}>
+          <label className="flex items-center justify-between gap-4 rounded-2xl bg-surface-2 p-4">
+            <span>
+              <span className="block font-semibold">App Store და Google Play ღილაკები</span>
+              <span className="block text-sm text-muted">Yandex Pro-ს ჩამოტვირთვის ორი ღილაკი, ღილაკის ფერებში. ჩართვისას ზემოთ მითითებული ერთი ღილაკი აღარ ჩანს.</span>
+            </span>
+            <input type="checkbox" name="showApps" checked={v.showApps} onChange={(e) => set("showApps", e.target.checked)} className="size-6 shrink-0 accent-ink" />
+          </label>
+        </section>
+
         <section className={`${adminCard} space-y-5`}>
           <h2 className="text-lg font-bold">იკონი</h2>
           <div className="flex flex-wrap gap-2">
@@ -234,15 +248,15 @@ export function PromotionForm({ initial }: { initial: PromotionFormValues }) {
       <aside className="xl:sticky xl:top-24 xl:self-start">
         <p className="mb-3 text-sm font-semibold">გადახედვა</p>
         <div className="overflow-hidden rounded-[20px] border border-line bg-surface-2 p-4">
-          {v.type === "banner" && <PromoBannerView p={preview} />}
+          {v.type === "banner" && <PromoBannerView p={preview} apps={PREVIEW_APPS} />}
           {v.type === "bar" && (
             <div className="-mx-4 -mt-4">
-              <PromoBarView p={preview} close={<CloseButton label="დახურვა" color={v.colors.text} />} />
+              <PromoBarView p={preview} apps={PREVIEW_APPS} close={<CloseButton label="დახურვა" color={v.colors.text} />} />
             </div>
           )}
           {v.type === "modal" && (
             <div className="flex justify-center rounded-2xl bg-ink/50 p-4">
-              <PromoModalCard p={preview} close={<CloseButton label="დახურვა" color={v.colors.text} />} />
+              <PromoModalCard p={preview} apps={PREVIEW_APPS} close={<CloseButton label="დახურვა" color={v.colors.text} />} />
             </div>
           )}
         </div>

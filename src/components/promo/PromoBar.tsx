@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
+import type { AppLinksText } from "@/components/AppLinks";
 import type { PublicPromotion } from "@/lib/promotions";
 import { CloseButton, PromoBarView } from "./PromoView";
 
 const noSubscription = () => () => {};
 
 /** The top strip. Closing it hides it for the rest of the browser session. */
-export function PromoBar({ promotion, closeLabel }: { promotion: PublicPromotion; closeLabel: string }) {
+export function PromoBar({ promotion, closeLabel, apps }: { promotion: PublicPromotion; closeLabel: string; apps: AppLinksText }) {
   const key = `temutaxi-bar-${promotion.version}`;
   const closedEarlier = useSyncExternalStore(
     noSubscription,
@@ -34,7 +35,7 @@ export function PromoBar({ promotion, closeLabel }: { promotion: PublicPromotion
 
   return (
     <aside aria-label={promotion.title}>
-      <PromoBarView p={promotion} close={<CloseButton label={closeLabel} color={promotion.colors.text} onClick={close} />} />
+      <PromoBarView p={promotion} apps={apps} close={<CloseButton label={closeLabel} color={promotion.colors.text} onClick={close} />} />
     </aside>
   );
 }

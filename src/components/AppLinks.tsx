@@ -20,10 +20,26 @@ const play = (
   </>
 );
 
-/** Buttons that open Yandex Pro, the driver app, in the App Store and Google Play. */
-export function AppLinks({ t, tone, className = "" }: { t: AppLinksText; tone: "dark" | "light"; className?: string }) {
-  const style =
-    tone === "dark"
+/**
+ * Buttons that open Yandex Pro, the driver app, in the App Store and Google Play.
+ * With colours (a promotion's button colours) they follow the promotion; compact fits the top bar.
+ */
+export function AppLinks({
+  t,
+  tone = "light",
+  colors,
+  compact = false,
+  className = "",
+}: {
+  t: AppLinksText;
+  tone?: "dark" | "light";
+  colors?: { background: string; text: string };
+  compact?: boolean;
+  className?: string;
+}) {
+  const style = colors
+    ? "border-transparent hover:opacity-90"
+    : tone === "dark"
       ? "border-dark-3 bg-dark-2 text-surface hover:border-on-dark-muted"
       : "border-ink bg-ink text-surface hover:bg-dark-2";
   const stores = [
@@ -32,22 +48,27 @@ export function AppLinks({ t, tone, className = "" }: { t: AppLinksText; tone: "
   ];
 
   return (
-    <div className={`flex flex-wrap gap-3 ${className}`}>
+    <div className={`flex flex-wrap ${compact ? "gap-2" : "gap-3"} ${className}`}>
       {stores.map((store) => (
         <a
           key={store.name}
           href={store.href}
           target="_blank"
           rel="noopener"
-          className={`inline-flex h-14 min-w-44 items-center gap-3 rounded-2xl border px-4 text-left transition ${style}`}
+          style={colors ? { background: colors.background, color: colors.text } : undefined}
+          className={`inline-flex items-center rounded-2xl border text-left transition ${compact ? "h-9 gap-2 px-2.5 sm:px-3" : "h-14 min-w-44 gap-3 px-4"} ${style}`}
         >
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="size-7 shrink-0">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className={`shrink-0 ${compact ? "size-4" : "size-7"}`}>
             {store.icon}
           </svg>
-          <span className="leading-tight">
-            <span className="block text-[11px] opacity-75">{store.top}</span>
-            <span className="block text-base font-semibold">{store.name}</span>
-          </span>
+          {compact ? (
+            <span className="sr-only text-sm font-semibold sm:not-sr-only">{store.name}</span>
+          ) : (
+            <span className="leading-tight">
+              <span className="block text-[11px] opacity-75">{store.top}</span>
+              <span className="block text-base font-semibold">{store.name}</span>
+            </span>
+          )}
         </a>
       ))}
     </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import type { AppLinksText } from "@/components/AppLinks";
 import type { PublicPromotion } from "@/lib/promotions";
 import { CloseButton, PromoModalCard } from "./PromoView";
 
@@ -30,7 +31,7 @@ function rememberSeen(p: PublicPromotion) {
   }
 }
 
-export function PromoModal({ promotion, closeLabel }: { promotion: PublicPromotion; closeLabel: string }) {
+export function PromoModal({ promotion, closeLabel, apps }: { promotion: PublicPromotion; closeLabel: string; apps: AppLinksText }) {
   const [open, setOpen] = useState(false);
   const titleId = useId();
   const dialog = useRef<HTMLDivElement>(null);
@@ -75,6 +76,7 @@ export function PromoModal({ promotion, closeLabel }: { promotion: PublicPromoti
     >
       <PromoModalCard
         p={promotion}
+        apps={apps}
         titleId={titleId}
         onButton={() => setOpen(false)}
         close={<CloseButton label={closeLabel} color={promotion.colors.text} onClick={() => setOpen(false)} />}

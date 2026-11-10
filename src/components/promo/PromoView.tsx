@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
 import type { PromotionColors, PromotionTheme } from "@/db/entities";
+import { AppLinks, type AppLinksText } from "../AppLinks";
 import { Icon, type IconName } from "../Icon";
 
 export type PromoContent = {
@@ -14,6 +15,7 @@ export type PromoContent = {
   buttonText: string;
   link: string | null;
   newTab: boolean;
+  showApps?: boolean;
 };
 
 /**
@@ -51,8 +53,14 @@ function Frame({ p, shape, className = "", children }: { p: PromoContent; shape:
   );
 }
 
+/** App Store and Google Play buttons in the promotion's button colours, when the admin turned them on. */
+function StoreButtons({ p, apps, compact, className = "" }: { p: PromoContent; apps?: AppLinksText; compact?: boolean; className?: string }) {
+  if (!p.showApps || !apps) return null;
+  return <AppLinks t={apps} colors={{ background: p.colors.button, text: p.colors.buttonText }} compact={compact} className={className} />;
+}
+
 function PromoButton({ p, onClick, className = "" }: { p: PromoContent; onClick?: () => void; className?: string }) {
-  if (!p.buttonText || !p.link) return null;
+  if (p.showApps || !p.buttonText || !p.link) return null;
   const style = { background: p.colors.button, color: p.colors.buttonText };
   const classes = `inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl font-semibold transition hover:opacity-90 ${className}`;
   const inner = (
@@ -86,7 +94,7 @@ function PromoIcon({ p, size, className = "" }: { p: PromoContent; size: "sm" | 
 }
 
 /** A section on the landing page. */
-export function PromoBannerView({ p }: { p: PromoContent }) {
+export function PromoBannerView({ p, apps }: { p: PromoContent; apps?: AppLinksText }) {
   return (
     <Frame p={p} shape="banner" className="rounded-[28px] p-6 sm:p-8 lg:p-10">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center">
@@ -96,13 +104,14 @@ export function PromoBannerView({ p }: { p: PromoContent }) {
           {p.body && <p className="mt-2 max-w-3xl whitespace-pre-line leading-relaxed opacity-85">{p.body}</p>}
         </div>
         <PromoButton p={p} className="h-14 self-start px-7 text-base lg:self-center" />
+        <StoreButtons p={p} apps={apps} className="shrink-0 self-start lg:self-center" />
       </div>
     </Frame>
   );
 }
 
 /** A narrow strip at the top of every page. */
-export function PromoBarView({ p, close }: { p: PromoContent; close?: ReactNode }) {
+export function PromoBarView({ p, close, apps }: { p: PromoContent; close?: ReactNode; apps?: AppLinksText }) {
   return (
     <Frame p={p} shape="bar">
       <div className="mx-auto flex max-w-site items-center gap-3 px-4 py-2.5 sm:px-6 lg:px-8">
@@ -113,6 +122,7 @@ export function PromoBarView({ p, close }: { p: PromoContent; close?: ReactNode 
           {p.body && <span className="hidden opacity-85 sm:inline"> {p.body}</span>}
         </p>
         <PromoButton p={p} className="h-8 px-3 text-xs sm:h-9 sm:px-4 sm:text-sm" />
+        <StoreButtons p={p} apps={apps} compact className="shrink-0" />
         {close}
       </div>
     </Frame>
@@ -120,7 +130,7 @@ export function PromoBarView({ p, close }: { p: PromoContent; close?: ReactNode 
 }
 
 /** The card inside the pop-up. */
-export function PromoModalCard({ p, close, titleId, onButton }: { p: PromoContent; close?: ReactNode; titleId?: string; onButton?: () => void }) {
+export function PromoModalCard({ p, close, titleId, onButton, apps }: { p: PromoContent; close?: ReactNode; titleId?: string; onButton?: () => void; apps?: AppLinksText }) {
   return (
     <Frame p={p} shape="modal" className="w-full max-w-md rounded-[28px] p-7 text-center shadow-2xl outline-none sm:p-9">
       {close && <div className="absolute right-4 top-4">{close}</div>}
@@ -132,6 +142,7 @@ export function PromoModalCard({ p, close, titleId, onButton }: { p: PromoConten
       <h2 id={titleId} className="text-2xl font-bold tracking-tight text-balance sm:text-3xl">{p.title}</h2>
       {p.body && <p className="mt-3 whitespace-pre-line leading-relaxed opacity-85">{p.body}</p>}
       <PromoButton p={p} onClick={onButton} className="mt-7 h-14 w-full px-7 text-base" />
+      <StoreButtons p={p} apps={apps} className="mt-7 justify-center" />
     </Frame>
   );
 }

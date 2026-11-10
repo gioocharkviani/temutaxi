@@ -211,6 +211,7 @@ export async function savePromotionAction(_: PromotionState, form: FormData): Pr
     icon: text(form, "icon"),
     link: text(form, "link"),
     newTab: form.get("newTab") === "on",
+    showApps: form.get("showApps") === "on",
     content: { ka: langText("ka"), en: langText("en"), ru: langText("ru") },
     repeat: text(form, "repeat") || "hours",
     repeatHours: text(form, "repeatHours") || "24",

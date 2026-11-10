@@ -289,6 +289,8 @@ export interface Promotion {
   /** A page of this site ("/register") or an http(s) address. */
   link: string | null;
   newTab: boolean;
+  /** Shows App Store and Google Play buttons for Yandex Pro instead of the single button. */
+  showApps: boolean;
   content: Record<"ka" | "en" | "ru", PromotionText>;
   /** Modal only: once per browser session, or again after repeatHours. */
   repeat: "session" | "hours";
@@ -313,6 +315,7 @@ export const PromotionEntity = new EntitySchema<Promotion>({
     icon: { type: "varchar", length: 32, nullable: true },
     link: { type: "varchar", length: 500, nullable: true },
     newTab: { name: "new_tab", type: "boolean" },
+    showApps: { name: "show_apps", type: "boolean" },
     content: { type: "json" },
     repeat: { name: "repeat_mode", type: "varchar", length: 16 },
     repeatHours: { name: "repeat_hours", type: "int" },

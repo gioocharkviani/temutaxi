@@ -60,6 +60,7 @@ export type PublicPromotion = {
   buttonText: string;
   link: string | null;
   newTab: boolean;
+  showApps: boolean;
   repeat: Promotion["repeat"];
   repeatHours: number;
 };
@@ -83,6 +84,7 @@ export function toPublicPromotion(p: Promotion, lang: Locale): PublicPromotion {
     buttonText: pick("buttonText"),
     link: localizeLink(p.link, lang),
     newTab: p.newTab,
+    showApps: p.showApps,
     repeat: p.repeat,
     repeatHours: p.repeatHours,
   };

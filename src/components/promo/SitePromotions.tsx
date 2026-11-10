@@ -15,8 +15,8 @@ export async function SitePromotions({ lang }: { lang: Locale }) {
 
   return (
     <>
-      {bar && <PromoBar key={bar.version} promotion={bar} closeLabel={dict.promo.close} />}
-      {modal && <PromoModal key={modal.version} promotion={modal} closeLabel={dict.promo.close} />}
+      {bar && <PromoBar key={bar.version} promotion={bar} closeLabel={dict.promo.close} apps={dict.apps} />}
+      {modal && <PromoModal key={modal.version} promotion={modal} closeLabel={dict.promo.close} apps={dict.apps} />}
     </>
   );
 }
@@ -24,13 +24,14 @@ export async function SitePromotions({ lang }: { lang: Locale }) {
 /** Banners on the landing page, under the hero. */
 export async function LandingPromotions({ lang }: { lang: Locale }) {
   await connection();
-  const banners = (await getActivePromotions(lang)).filter((p) => p.type === "banner");
+  const [all, dict] = await Promise.all([getActivePromotions(lang), getDictionary(lang)]);
+  const banners = all.filter((p) => p.type === "banner");
   if (banners.length === 0) return null;
 
   return (
     <section aria-label="Promotions" className="mx-auto max-w-site space-y-4 px-4 pt-12 sm:px-6 lg:px-8 lg:pt-16">
       {banners.map((p) => (
-        <PromoBannerView key={p.version} p={p} />
+        <PromoBannerView key={p.version} p={p} apps={dict.apps} />
       ))}
     </section>
   );

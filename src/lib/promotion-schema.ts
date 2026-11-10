@@ -72,6 +72,7 @@ export const promotionSchema = z
       .refine((v) => !v || /^(https?:\/\/[^\s]+|\/[^\s]*)$/.test(v), "ბმული ასე: /register ან https://…")
       .transform((v) => v || null),
     newTab: z.boolean(),
+    showApps: z.boolean(),
     content: z.object({
       ka: localized.extend({ title: text(120).min(1, "ქართული სათაური აუცილებელია") }),
       en: localized,
@@ -85,7 +86,7 @@ export const promotionSchema = z
       ctx.addIssue({ code: "custom", path: ["endsAt"], message: "დასრულება დაწყების შემდეგ უნდა იყოს" });
     }
     const hasButton = (["ka", "en", "ru"] as const).some((l) => v.content[l].buttonText);
-    if (hasButton && !v.link) ctx.addIssue({ code: "custom", path: ["link"], message: "ღილაკს ბმული სჭირდება" });
+    if (hasButton && !v.showApps && !v.link) ctx.addIssue({ code: "custom", path: ["link"], message: "ღილაკს ბმული სჭირდება" });
   });
 
 export type PromotionInput = z.output<typeof promotionSchema>;

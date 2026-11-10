@@ -18,6 +18,7 @@ import { StoredRatingAndPrivacy1762700000000 } from "./migrations/1762700000000-
 import { SeoAndStoredDataTerms1762800000000 } from "./migrations/1762800000000-SeoAndStoredDataTerms";
 import { LeaderboardAndPhones1762900000000 } from "./migrations/1762900000000-LeaderboardAndPhones";
 import { Promotions1763000000000 } from "./migrations/1763000000000-Promotions";
+import { PromotionStoreButtons1763100000000 } from "./migrations/1763100000000-PromotionStoreButtons";
 
 function createDataSource() {
   return new DataSource({
@@ -46,6 +47,7 @@ function createDataSource() {
       SeoAndStoredDataTerms1762800000000,
       LeaderboardAndPhones1762900000000,
       Promotions1763000000000,
+      PromotionStoreButtons1763100000000,
     ],
   });
 }
