@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useMemo, useRef, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import type { Locale } from "@/i18n/config";
 import type { RegisterDictionary } from "@/i18n/dictionaries/register-en";
 import { fill } from "@/i18n/fill";
@@ -85,6 +85,23 @@ export function RegisterForm({
   const [done, setDone] = useState(false);
   // Stays the same across retries, so the receiver can spot a repeated submission.
   const requestId = useRef<string | null>(null);
+
+  // Next.js keeps a page and its state when the visitor leaves it, so coming back would show the
+  // success message again. After a successful registration, leaving the page clears the form and the
+  // request id, so the next visit starts a new, separate registration. Unsent typing is kept on purpose.
+  useEffect(() => {
+    if (!done) return;
+    return () => {
+      setValues(initialValues(params, cars));
+      setTouched({});
+      setSubmitted(false);
+      setSendFailed(false);
+      setDone(false);
+      requestId.current = null;
+    };
+    // Only leaving the page after success should reset; params and cars do not change while it is shown.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [done]);
 
   const brands = useMemo(() => brandsOf(cars), [cars]);
   const state = getTariffState(values, cars);
