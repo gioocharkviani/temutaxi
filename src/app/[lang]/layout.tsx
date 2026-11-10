@@ -4,6 +4,8 @@ import { hasLocale, locales } from "@/i18n/config";
 import { siteMetadata } from "@/lib/seo";
 import { fontVariables } from "../fonts";
 import "../globals.css";
+import { Suspense } from "react";
+import { SitePromotions } from "@/components/promo/SitePromotions";
 
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -24,7 +26,13 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
 
   return (
     <html lang={lang} data-scroll-behavior="smooth" className={`${fontVariables} antialiased`}>
-      <body className="min-h-dvh">{children}</body>
+      <body className="min-h-dvh">
+        {/* The top bar and the pop-up, read from the database for each visit. */}
+        <Suspense fallback={null}>
+          <SitePromotions lang={lang} />
+        </Suspense>
+        {children}
+      </body>
     </html>
   );
 }

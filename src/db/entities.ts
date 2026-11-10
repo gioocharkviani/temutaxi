@@ -268,6 +268,59 @@ export type SeoSettings = {
   pages: Record<SeoPageKey, Record<"ka" | "en" | "ru", SeoText>>;
 };
 
+export type PromotionType = "modal" | "banner" | "bar";
+export type PromotionTheme = "solid" | "glow" | "stripes" | "outline";
+export type PromotionText = { title: string; body: string; buttonText: string };
+export type PromotionColors = { background: string; text: string; button: string; buttonText: string };
+
+export interface Promotion {
+  id: number;
+  /** Only shown in the admin panel. */
+  name: string;
+  type: PromotionType;
+  theme: PromotionTheme;
+  enabled: boolean;
+  /** Higher shows first; only the highest modal and bar are shown. */
+  priority: number;
+  startsAt: Date | null;
+  endsAt: Date | null;
+  colors: PromotionColors;
+  icon: string | null;
+  /** A page of this site ("/register") or an http(s) address. */
+  link: string | null;
+  newTab: boolean;
+  content: Record<"ka" | "en" | "ru", PromotionText>;
+  /** Modal only: once per browser session, or again after repeatHours. */
+  repeat: "session" | "hours";
+  repeatHours: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export const PromotionEntity = new EntitySchema<Promotion>({
+  name: "Promotion",
+  tableName: "promotions",
+  columns: {
+    id: { type: "int", primary: true, generated: true },
+    name: { type: "varchar", length: 80 },
+    type: { type: "varchar", length: 16 },
+    theme: { type: "varchar", length: 16 },
+    enabled: { type: "boolean" },
+    priority: { type: "int" },
+    startsAt: { name: "starts_at", type: "datetime", nullable: true },
+    endsAt: { name: "ends_at", type: "datetime", nullable: true },
+    colors: { type: "json" },
+    icon: { type: "varchar", length: 32, nullable: true },
+    link: { type: "varchar", length: 500, nullable: true },
+    newTab: { name: "new_tab", type: "boolean" },
+    content: { type: "json" },
+    repeat: { name: "repeat_mode", type: "varchar", length: 16 },
+    repeatHours: { name: "repeat_hours", type: "int" },
+    createdAt: { name: "created_at", type: "datetime", createDate: true },
+    updatedAt: { name: "updated_at", type: "datetime", updateDate: true },
+  },
+});
+
 export interface SiteSettings {
   id: number;
   carListCity: string;

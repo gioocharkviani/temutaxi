@@ -11,4 +11,9 @@ export const site = {
   },
   copyrightYear: 2026,
   services: ["Yandex Taxi", "Yandex Go", "Yandex Pro"],
+  /** Yandex Pro, the app drivers work in (formerly Taximeter). */
+  yandexPro: {
+    ios: "https://apps.apple.com/app/yandex-pro/id1496904594",
+    android: "https://play.google.com/store/apps/details?id=ru.yandex.taximeter",
+  },
 } as const;

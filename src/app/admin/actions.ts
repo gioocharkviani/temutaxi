@@ -8,6 +8,8 @@ import { AUTO_LIST_CITIES } from "@/lib/auto-list";
 import { saveCarListCity } from "@/lib/cars";
 import type { Locale } from "@/i18n/config";
 import { savePrivacyContent } from "@/lib/privacy";
+import { promotionSchema } from "@/lib/promotion-schema";
+import { deletePromotion, getPromotion, savePromotion, setPromotionEnabled } from "@/lib/promotions";
 import { saveSeo, SEO_TAG } from "@/lib/seo";
 import { SEO_PAGE_KEYS, seoSchema } from "@/lib/seo-schema";
 import { runCarListUpdate, runRatingSync, runRatingSyncIfDue, startJob } from "@/lib/jobs";
@@ -177,6 +179,67 @@ export async function saveSeoAction(_: SeoState, form: FormData): Promise<SeoSta
   updateTag(SEO_TAG);
   revalidateAdmin();
   return { saved: true };
+}
+
+export type PromotionState = { errors?: SettingsErrors };
+
+export async function savePromotionAction(_: PromotionState, form: FormData): Promise<PromotionState> {
+  await requireAdmin();
+  const rawId = text(form, "id");
+  const id = rawId === "new" ? null : Number(rawId);
+  if (id !== null && !(Number.isInteger(id) && id > 0)) return { errors: { name: "უცნობი პრომოუშენი" } };
+
+  const langText = (lang: Locale) => ({
+    title: text(form, `content.${lang}.title`),
+    body: text(form, `content.${lang}.body`),
+    buttonText: text(form, `content.${lang}.buttonText`),
+  });
+  const parsed = promotionSchema.safeParse({
+    name: text(form, "name"),
+    type: text(form, "type"),
+    theme: text(form, "theme"),
+    enabled: form.get("enabled") === "on",
+    priority: text(form, "priority"),
+    startsAt: text(form, "startsAt"),
+    endsAt: text(form, "endsAt"),
+    colors: {
+      background: text(form, "colors.background"),
+      text: text(form, "colors.text"),
+      button: text(form, "colors.button"),
+      buttonText: text(form, "colors.buttonText"),
+    },
+    icon: text(form, "icon"),
+    link: text(form, "link"),
+    newTab: form.get("newTab") === "on",
+    content: { ka: langText("ka"), en: langText("en"), ru: langText("ru") },
+    repeat: text(form, "repeat") || "hours",
+    repeatHours: text(form, "repeatHours") || "24",
+  });
+  if (!parsed.success) {
+    const errors: SettingsErrors = {};
+    for (const issue of parsed.error.issues) errors[issue.path.join(".")] ??= issue.message;
+    return { errors };
+  }
+  if (id !== null && !(await getPromotion(id))) return { errors: { name: "პრომოუშენი წაშლილია" } };
+
+  await savePromotion(id, parsed.data);
+  revalidateAdmin();
+  redirect("/admin/promotions");
+}
+
+export async function togglePromotionAction(form: FormData) {
+  await requireAdmin();
+  const id = Number(text(form, "id"));
+  const promotion = Number.isInteger(id) && id > 0 ? await getPromotion(id) : null;
+  if (promotion) await setPromotionEnabled(id, !promotion.enabled);
+  revalidateAdmin();
+}
+
+export async function deletePromotionAction(form: FormData) {
+  await requireAdmin();
+  const id = Number(text(form, "id"));
+  if (Number.isInteger(id) && id > 0) await deletePromotion(id);
+  revalidateAdmin();
 }
 
 export type PasswordState = { error?: string; saved?: boolean };

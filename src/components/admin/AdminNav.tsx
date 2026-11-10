@@ -7,20 +7,25 @@ const PAGES = [
   { href: "/admin", label: "რეგისტრაციები" },
   { href: "/admin/rating", label: "ლიდერბორდი" },
   { href: "/admin/privacy", label: "Privacy Policy" },
+  { href: "/admin/promotions", label: "პრომოუშენები" },
   { href: "/admin/seo", label: "SEO" },
   { href: "/admin/cars", label: "მანქანების სია" },
   { href: "/admin/password", label: "პაროლი" },
 ];
 
-/** A side menu on large screens, and a row that scrolls sideways on phones. */
+/** The menu with the current page marked. Reads the address, so it sits inside <Suspense>. */
 export function AdminNav() {
-  const pathname = usePathname();
+  return <AdminNavLinks pathname={usePathname()} />;
+}
 
+/** A side menu on large screens, and a row that scrolls sideways on phones. Without a pathname nothing is marked. */
+export function AdminNavLinks({ pathname }: { pathname: string | null }) {
   return (
     <nav aria-label="ადმინ პანელის გვერდები" className="lg:sticky lg:top-24 lg:self-start">
       <ul className="-mx-4 flex gap-1 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0 lg:flex-col">
         {PAGES.map(({ href, label }) => {
-          const active = pathname === href;
+          // A promotion's edit page keeps "Promotions" marked.
+          const active = pathname !== null && (pathname === href || (href !== "/admin" && pathname.startsWith(`${href}/`)));
           return (
             <li key={href} className="shrink-0">
               <Link

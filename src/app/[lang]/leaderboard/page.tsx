@@ -42,7 +42,7 @@ export default async function RatingPage({ params, searchParams }: PageProps<"/[
           <RatingContent lang={lang} t={dict.rating} searchParams={searchParams} />
         </Suspense>
       </main>
-      <Footer lang={lang} t={dict.footer} nav={dict.nav} />
+      <Footer lang={lang} t={dict.footer} nav={dict.nav} apps={dict.apps} />
     </>
   );
 }

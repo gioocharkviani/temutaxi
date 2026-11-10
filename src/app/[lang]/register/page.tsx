@@ -57,7 +57,7 @@ export default async function RegisterPage({ params }: PageProps<"/[lang]/regist
           </div>
         </div>
       </main>
-      <Footer lang={lang} t={dict.footer} nav={dict.nav} />
+      <Footer lang={lang} t={dict.footer} nav={dict.nav} apps={dict.apps} />
     </>
   );
 }

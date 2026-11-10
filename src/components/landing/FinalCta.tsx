@@ -2,10 +2,11 @@ import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import { site } from "@/config/site";
+import { AppLinks } from "../AppLinks";
 import { Icon } from "../Icon";
 import { LogoMark } from "../Logo";
 
-export function FinalCta({ t, lang }: { t: Dictionary["cta"]; lang: Locale }) {
+export function FinalCta({ t, apps, lang }: { t: Dictionary["cta"]; apps: Dictionary["apps"]; lang: Locale }) {
   return (
     <section aria-labelledby="cta-title" className="mx-auto max-w-site px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
       <div className="relative overflow-hidden rounded-[32px] bg-dark px-6 py-14 text-center text-surface sm:px-12 lg:py-20">
@@ -30,6 +31,11 @@ export function FinalCta({ t, lang }: { t: Dictionary["cta"]; lang: Locale }) {
             <Icon name="phone" className="size-5" />
             {site.phone.display}
           </a>
+        </div>
+        <div className="relative mx-auto mt-10 max-w-xl border-t border-dark-3 pt-8">
+          <p className="font-semibold">{apps.title}</p>
+          <p className="mt-1 text-sm text-on-dark-muted">{apps.body}</p>
+          <AppLinks t={apps} tone="dark" className="mt-5 justify-center" />
         </div>
       </div>
     </section>

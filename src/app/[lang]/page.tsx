@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { pageMetadata } from "@/lib/seo";
 import { JsonLd } from "@/components/landing/JsonLd";
+import { LandingPromotions } from "@/components/promo/SitePromotions";
 import { Suspense } from "react";
 import { hasLocale } from "@/i18n/config";
 import { getCarCheckDictionary, getDictionary, getTariffsDictionary } from "@/i18n/dictionaries";
@@ -46,6 +47,9 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
       <SiteHeader lang={lang} nav={dict.nav} />
       <main id="main" tabIndex={-1} className="outline-none">
         <Hero t={dict.hero} servicesLabel={dict.services.label} lang={lang} />
+        <Suspense fallback={null}>
+          <LandingPromotions lang={lang} />
+        </Suspense>
         <Roles t={dict.roles} lang={lang} />
         <Benefits t={dict.benefits} />
         {/* Read from the database on each request; renders nothing when turned off in the admin panel. */}
@@ -61,9 +65,9 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
           </Suspense>
         )}
         <FaqContact faq={dict.faq} contact={dict.contact} />
-        <FinalCta t={dict.cta} lang={lang} />
+        <FinalCta t={dict.cta} apps={dict.apps} lang={lang} />
       </main>
-      <Footer lang={lang} t={dict.footer} nav={dict.nav} />
+      <Footer lang={lang} t={dict.footer} nav={dict.nav} apps={dict.apps} />
     </>
   );
 }

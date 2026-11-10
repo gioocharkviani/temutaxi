@@ -81,10 +81,16 @@ const registerEn = {
     tariffEmpty: "Not chosen yet",
     help: "Need help? Write to us on WhatsApp.",
   },
+  apps: {
+    appStore: "Download on the",
+    googlePlay: "Get it on",
+  },
   success: {
     title: "Application received",
     body: "Thank you! Your application has been received. Our manager will contact you shortly about the next steps.",
     home: "Back to the home page",
+    appsTitle: "Next step: install Yandex Pro",
+    appsBody: "You will receive orders in the Yandex Pro app. Install it now and sign in with the phone number from your application.",
   },
 };
 

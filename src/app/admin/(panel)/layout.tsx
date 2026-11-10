@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense, type ReactNode } from "react";
-import { AdminNav } from "@/components/admin/AdminNav";
+import { AdminNav, AdminNavLinks } from "@/components/admin/AdminNav";
 import { secondaryButton } from "@/components/admin/styles";
 import { LogoMark } from "@/components/Logo";
 import { requireAdmin } from "@/lib/admin/auth";
@@ -23,7 +23,10 @@ export default function PanelLayout({ children }: { children: ReactNode }) {
       </header>
 
       <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)] gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-10 lg:py-8">
-        <AdminNav />
+        {/* The links show at once; the current page is marked when the address is known. */}
+        <Suspense fallback={<AdminNavLinks pathname={null} />}>
+          <AdminNav />
+        </Suspense>
         <main className="min-w-0 space-y-8">{children}</main>
       </div>
     </div>

@@ -2,9 +2,10 @@ import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import { site } from "@/config/site";
+import { AppLinks } from "./AppLinks";
 import { Logo } from "./Logo";
 
-export function Footer({ lang, t, nav }: { lang: Locale; t: Dictionary["footer"]; nav: Dictionary["nav"] }) {
+export function Footer({ lang, t, nav, apps }: { lang: Locale; t: Dictionary["footer"]; nav: Dictionary["nav"]; apps: Dictionary["apps"] }) {
   const links = [
     { href: `/${lang}#roles`, label: nav.roles },
     { href: `/${lang}/tariffs`, label: nav.tariffs },
@@ -51,6 +52,8 @@ export function Footer({ lang, t, nav }: { lang: Locale; t: Dictionary["footer"]
             <li><a href={site.whatsapp.href} target="_blank" rel="noopener" className="transition hover:text-brand">WhatsApp: {site.whatsapp.display}</a></li>
             <li><a href={`mailto:${site.email}`} className="break-all transition hover:text-brand">{site.email}</a></li>
           </ul>
+          <p className="mt-8 text-sm font-semibold">{apps.title}</p>
+          <AppLinks t={apps} tone="dark" className="mt-4" />
         </div>
       </div>
 

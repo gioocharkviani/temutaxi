@@ -3,7 +3,8 @@ import type { PluralForms } from "../plural";
 const en = {
   meta: {
     title: "Register as a Yandex Taxi Driver in Georgia Online — TemuTaxi",
-    description: "Register online as a taxi driver with Yandex Taxi, Yandex Go and Yandex Pro in Tbilisi, Batumi and across Georgia. Check your car and tariff.",
+    description:
+      "Register online as a taxi driver with Yandex Taxi, Yandex Go and Yandex Pro in Tbilisi, Batumi and across Georgia. Check your car and tariff.",
   },
   nav: {
     skip: "Skip to content",
@@ -30,6 +31,7 @@ const en = {
       { value: "24/7", label: "Online application" },
       { value: "5", label: "Simple steps" },
       { value: "GE", label: "All of Georgia" },
+      { value: "24/7", label: "Cash out" },
     ],
     card: {
       title: "Your application",
@@ -46,7 +48,11 @@ const en = {
       tag: "For drivers",
       title: "Drive with Yandex Taxi & Yandex Go",
       body: "Submit your application online, complete verification and get support from our team.",
-      points: ["Yandex Taxi, Yandex Go, Yandex Pro", "Tbilisi, Batumi and all of Georgia", "Smooth process with an official partner"],
+      points: [
+        "Yandex Taxi, Yandex Go, Yandex Pro",
+        "Tbilisi, Batumi and all of Georgia",
+        "Smooth process with an official partner",
+      ],
       cta: "Register as a driver",
     },
   },
@@ -54,32 +60,57 @@ const en = {
     label: "Why TemuTaxi",
     title: "Why people choose TemuTaxi",
     items: [
-      { title: "Fully online", body: "Apply from your phone, tablet or computer — no extra bureaucracy." },
-      { title: "Fast start", body: "If your details are correct, registration is usually completed quickly." },
-      { title: "Personal support", body: "Our office and WhatsApp manager help you through every step." },
-      { title: "All of Georgia", body: "Registration is available in Tbilisi, Batumi and across the country." },
-      { title: "Bonuses & promos", body: "Get up-to-date information about bonuses and special offers." },
-      { title: "Official partner", body: "Work with an official Yandex partner you can rely on." },
+      {
+        title: "Fully online",
+        body: "Apply from your phone, tablet or computer — no extra bureaucracy.",
+      },
+      {
+        title: "Fast start",
+        body: "If your details are correct, registration is usually completed quickly.",
+      },
+      {
+        title: "Personal support",
+        body: "Our office and WhatsApp manager help you through every step.",
+      },
+      {
+        title: "All of Georgia",
+        body: "Registration is available in Tbilisi, Batumi and across the country.",
+      },
+      {
+        title: "Bonuses & promos",
+        body: "Get up-to-date information about bonuses and special offers.",
+      },
+      {
+        title: "Official partner",
+        body: "Work with an official Yandex partner you can rely on.",
+      },
     ],
   },
   rating: {
     label: "Driver leaderboard",
     periodLabel: "Period",
-    rollingPeriod: { one: "Last {n} day", other: "Last {n} days" } as PluralForms,
+    rollingPeriod: {
+      one: "Last {n} day",
+      other: "Last {n} days",
+    } as PluralForms,
     minOrdersLabel: "Minimum orders",
     updated: "Updated: {time}",
     orders: { one: "order", other: "orders" } as PluralForms,
     cta: "Join the park",
     details: "Full leaderboard and conditions",
-    unavailable: "The leaderboard is temporarily unavailable. Please try again shortly.",
+    unavailable:
+      "The leaderboard is temporarily unavailable. Please try again shortly.",
     empty: "There are no results for this period yet.",
     loading: "Loading the leaderboard",
     metaTitle: "Taxi Driver Leaderboard and Conditions — TemuTaxi",
-    metaDescription: "The park's top drivers, the full leaderboard rules, and a search to find your own place.",
+    metaDescription:
+      "The park's top drivers, the full leaderboard rules, and a search to find your own place.",
     topTitle: "Top {n}",
     searchTitle: "Find your place",
-    searchLead: "Not in the top? Start typing your name or surname and your place and orders appear straight away.",
-    searchLeadPhone: "Not in the top? Start typing your name, surname or full phone number and your place and orders appear straight away.",
+    searchLead:
+      "Not in the top? Start typing your name or surname and your place and orders appear straight away.",
+    searchLeadPhone:
+      "Not in the top? Start typing your name, surname or full phone number and your place and orders appear straight away.",
     searchLabelPhone: "Name, surname or phone",
     searchPlaceholderPhone: "Name, surname or phone",
     searchPhoneShort: "Enter the full phone number: 9 digits.",
@@ -89,7 +120,8 @@ const en = {
     searchButton: "Search",
     searchTooShort: "Enter at least {n} letters.",
     searchEmpty: "No driver with this name was found in the current period.",
-    searchMore: "Showing the first {n} matches. Enter your full name to narrow them down.",
+    searchMore:
+      "Showing the first {n} matches. Enter your full name to narrow them down.",
     place: "place",
     inTop: "In the top {n}",
     rulesTitle: "Rules and conditions",
@@ -115,13 +147,34 @@ const en = {
     label: "FAQ",
     title: "Frequently asked questions",
     items: [
-      { q: "How long does registration take?", a: "If all information is filled in correctly, registration is usually completed quickly." },
-      { q: "Can I register from my phone?", a: "Yes, you can submit your application from your phone, tablet or computer." },
-      { q: "Is TemuTaxi an official Yandex partner?", a: "Yes, TemuTaxi is an official Yandex partner in Georgia and helps drivers complete registration." },
-      { q: "Is registration available only in Batumi?", a: "No. Registration is available in Tbilisi, Batumi and across Georgia." },
-      { q: "Can I register in Yandex Pro?", a: "Yes, TemuTaxi helps with registration in Yandex Pro, as well as Yandex Taxi and Yandex Go." },
-      { q: "Can a taxi drive in the bus lane?", a: "In Tbilisi, it depends on the taxi’s permit category. A Category A taxi can pick up and drop off passengers in the bus lane, and under a 2023 City Hall decision, a Category A car under 10 years old with a special sticker can also drive in it. A Category B taxi does not have this right. Registering with Yandex or TemuTaxi does not give the right to use the bus lane. Check the current conditions with Tbilisi City Hall: taxi.tbilisi.gov.ge." },
-      { q: "What is the fine for driving in a bus lane without the right?", a: "According to published information on the changes in force from 1 May 2026: driving in a bus lane is fined 100 GEL and 15 penalty points, or 150 GEL and 30 points for a repeat offence. Driving, stopping or parking in an oncoming bus lane is fined 200 GEL and 20 points, or 300 GEL and 30 points for a repeat offence. Amounts can change, so check official sources." },
+      {
+        q: "How long does registration take?",
+        a: "If all information is filled in correctly, registration is usually completed quickly.",
+      },
+      {
+        q: "Can I register from my phone?",
+        a: "Yes, you can submit your application from your phone, tablet or computer.",
+      },
+      {
+        q: "Is TemuTaxi an official Yandex partner?",
+        a: "Yes, TemuTaxi is an official Yandex partner in Georgia and helps drivers complete registration.",
+      },
+      {
+        q: "Is registration available only in Batumi?",
+        a: "No. Registration is available in Tbilisi, Batumi and across Georgia.",
+      },
+      {
+        q: "Can I register in Yandex Pro?",
+        a: "Yes, TemuTaxi helps with registration in Yandex Pro, as well as Yandex Taxi and Yandex Go.",
+      },
+      {
+        q: "Can a taxi drive in the bus lane?",
+        a: "In Tbilisi, it depends on the taxi’s permit category. A Category A taxi can pick up and drop off passengers in the bus lane, and under a 2023 City Hall decision, a Category A car under 10 years old with a special sticker can also drive in it. A Category B taxi does not have this right. Registering with Yandex or TemuTaxi does not give the right to use the bus lane. Check the current conditions with Tbilisi City Hall: taxi.tbilisi.gov.ge.",
+      },
+      {
+        q: "What is the fine for driving in a bus lane without the right?",
+        a: "According to published information on the changes in force from 1 May 2026: driving in a bus lane is fined 100 GEL and 15 penalty points, or 150 GEL and 30 points for a repeat offence. Driving, stopping or parking in an oncoming bus lane is fined 200 GEL and 20 points, or 300 GEL and 30 points for a repeat offence. Amounts can change, so check official sources.",
+      },
     ],
   },
   contact: {
@@ -137,9 +190,19 @@ const en = {
     body: "Submit your application now — fast registration in Yandex Taxi, Yandex Go and Yandex Pro.",
     button: "Register now",
   },
+  apps: {
+    title: "Download Yandex Pro",
+    body: "The driver app where you receive orders.",
+    appStore: "Download on the",
+    googlePlay: "Get it on",
+  },
+  promo: {
+    close: "Close",
+  },
   footer: {
     tagline: "Official Yandex partner in Georgia for taxi driver registration.",
-    disclaimer: "This website is operated by Company LLC and is not the official website of Yandex Go.",
+    disclaimer:
+      "This website is operated by Company LLC and is not the official website of Yandex Go.",
     policy: "Privacy policy",
     rights: "All rights reserved.",
     madeBy: "Website by",
