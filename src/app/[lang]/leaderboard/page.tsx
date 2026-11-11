@@ -10,7 +10,8 @@ import type { Dictionary } from "@/i18n/dictionaries/en";
 import { fill } from "@/i18n/fill";
 import { Footer } from "@/components/Footer";
 import { SiteHeader } from "@/components/SiteHeader";
-import { formatUpdated, periodLabel } from "@/components/rating/period-label";
+import { Countdown } from "@/components/rating/Countdown";
+import { countdownRange, formatUpdated, periodLabel } from "@/components/rating/period-label";
 import { RatingList, RatingListSkeleton } from "@/components/rating/RatingList";
 import { RichText } from "@/components/RichText";
 import { getRatingText } from "@/lib/rating/content";
@@ -64,6 +65,7 @@ async function RatingContent({ lang, t, searchParams }: { lang: Locale; t: Dicti
   const { q } = await searchParams;
   const query = (typeof q === "string" ? q : "").trim().slice(0, 60);
   const phoneSearch = await hasStoredPhones().catch(() => false);
+  const countdown = countdownRange(settings);
 
   return (
     <>
@@ -82,6 +84,7 @@ async function RatingContent({ lang, t, searchParams }: { lang: Locale; t: Dicti
               <dd className="inline font-semibold">{settings.minOrders}</dd>
             </div>
           </dl>
+          {countdown && <Countdown from={countdown.from} to={countdown.to} t={t.countdown} className="mt-6" />}
         </div>
       </section>
 

@@ -2,6 +2,7 @@ import { after } from "next/server";
 import { getCars } from "@/lib/cars";
 import { sendRegistrationEmail } from "@/lib/mail";
 import { createDriverProfile } from "@/lib/fleet";
+import { classifyFleetError, showsYandexText } from "@/lib/fleet-errors";
 import { effectiveTariff, getTariffState } from "@/lib/registration";
 import { parseRegistration, validateRegistration } from "@/lib/registration-schema";
 import { markRegistrationFailed, markRegistrationSent, saveRegistration } from "@/lib/registrations";
@@ -41,11 +42,23 @@ export async function POST(request: Request) {
   if (saved.alreadySent) return Response.json({ ok: true });
 
   // 4. Create the driver in Yandex.
-  const result = await createDriverProfile(values, tariff, token);
+  // A retry after Yandex refused the application gets a fresh token, or Yandex could repeat its old answer.
+  const yandexToken = saved.refusedBefore ? `${token.slice(0, 40)}-${Date.now().toString(36)}` : token;
+  const result = await createDriverProfile(values, tariff, yandexToken);
   // Admins hear about every application, also the ones Yandex refused.
   after(() => sendRegistrationEmail(saved.id));
   if (!result.ok) {
     await markRegistrationFailed(saved.id, result.detail ?? result.reason);
+    if (result.reason === "rejected") {
+      return Response.json(
+        {
+          error: "rejected",
+          kind: classifyFleetError(result.status, result.code, result.message),
+          yandex: showsYandexText(result.status) ? { code: result.code.slice(0, 100), message: result.message.slice(0, 300) } : null,
+        },
+        { status: STATUS.rejected },
+      );
+    }
     return Response.json({ error: result.reason }, { status: STATUS[result.reason] });
   }
   await markRegistrationSent(saved.id, result.id);

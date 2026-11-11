@@ -91,6 +91,15 @@ const en = {
   rating: {
     label: "Driver leaderboard",
     periodLabel: "Period",
+    countdown: {
+      endsIn: "Time left until the leaderboard ends",
+      startsIn: "Time left until the leaderboard starts",
+      ended: "The leaderboard has ended — final results are shown.",
+      days: "days",
+      hours: "hours",
+      minutes: "min",
+      seconds: "sec",
+    },
     rollingPeriod: {
       one: "Last {n} day",
       other: "Last {n} days",

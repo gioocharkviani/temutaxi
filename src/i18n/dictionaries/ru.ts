@@ -91,6 +91,15 @@ const ru: Dictionary = {
   rating: {
     label: "Лидерборд водителей",
     periodLabel: "Период",
+    countdown: {
+      endsIn: "До конца лидерборда осталось",
+      startsIn: "До начала лидерборда осталось",
+      ended: "Лидерборд завершён — показаны итоговые результаты.",
+      days: "дн.",
+      hours: "ч",
+      minutes: "мин",
+      seconds: "сек",
+    },
     rollingPeriod: {
       one: "Последний {n} день",
       few: "Последние {n} дня",

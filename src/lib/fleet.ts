@@ -8,7 +8,8 @@ const TIMEOUT_MS = 15_000;
 
 export type FleetResult =
   | { ok: true; id: string }
-  | { ok: false; reason: "not-configured" | "rejected" | "unreachable"; detail?: string };
+  | { ok: false; reason: "not-configured" | "unreachable"; detail?: string }
+  | { ok: false; reason: "rejected"; detail: string; status: number; code: string; message: string };
 
 function readConfig() {
   const { BASE_URL, API_KEY, CLIENT_ID, PARK_ID } = process.env;
@@ -274,7 +275,14 @@ export async function createDriverProfile(
 
   if (!response.ok || !data.contractor_profile_id) {
     console.error("Fleet API refused a driver profile", response.status, data.code, data.message);
-    return { ok: false, reason: "rejected", detail: `${response.status} ${data.code ?? ""} ${data.message ?? ""}`.trim() };
+    return {
+      ok: false,
+      reason: "rejected",
+      detail: `${response.status} ${data.code ?? ""} ${data.message ?? ""}`.trim(),
+      status: response.status,
+      code: String(data.code ?? ""),
+      message: String(data.message ?? ""),
+    };
   }
   return { ok: true, id: data.contractor_profile_id };
 }

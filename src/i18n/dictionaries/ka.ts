@@ -95,6 +95,15 @@ const ka: Dictionary = {
   rating: {
     label: "მძღოლების ლიდერბორდი",
     periodLabel: "პერიოდი",
+    countdown: {
+      endsIn: "ლიდერბორდის დასრულებამდე დარჩა",
+      startsIn: "ლიდერბორდის დაწყებამდე დარჩა",
+      ended: "ლიდერბორდი დასრულდა — ნაჩვენებია საბოლოო შედეგები.",
+      days: "დღე",
+      hours: "საათი",
+      minutes: "წუთი",
+      seconds: "წამი",
+    },
     rollingPeriod: { one: "ბოლო {n} დღე", other: "ბოლო {n} დღე" },
     minOrdersLabel: "შეკვეთების მინიმუმი",
     updated: "განახლდა: {time}",

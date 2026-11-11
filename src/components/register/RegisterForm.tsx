@@ -17,6 +17,7 @@ import {
   type RegistrationValues,
   type TextField,
 } from "@/lib/registration";
+import { FLEET_ERROR_FIELD, type FleetErrorKind } from "@/lib/fleet-errors";
 import { validateRegistration } from "@/lib/registration-schema";
 import { Icon } from "../Icon";
 import { ApplicationSummary } from "./ApplicationSummary";
@@ -85,7 +86,15 @@ export function RegisterForm({
   const [touched, setTouched] = useState<Partial<Record<RegistrationField, boolean>>>({});
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
-  const [sendFailed, setSendFailed] = useState(false);
+  // null: nothing went wrong. "network": no answer. Otherwise what Yandex refused, with its own text when it is about the application.
+  const [sendFailed, setSendFailed] = useState<SendFailure | null>(null);
+  // The field Yandex refused; focused once sending ends, because the fields are disabled while it runs.
+  const focusAfterSend = useRef<string | null>(null);
+  useEffect(() => {
+    if (sending || !focusAfterSend.current) return;
+    document.getElementById(`reg-${focusAfterSend.current}`)?.focus();
+    focusAfterSend.current = null;
+  }, [sending]);
   const [done, setDone] = useState(false);
   // Stays the same across retries, so the receiver can spot a repeated submission.
   const requestId = useRef<string | null>(null);
@@ -99,7 +108,7 @@ export function RegisterForm({
       setValues(initialValues(params, cars));
       setTouched({});
       setSubmitted(false);
-      setSendFailed(false);
+      setSendFailed(null);
       setDone(false);
       requestId.current = null;
     };
@@ -149,7 +158,7 @@ export function RegisterForm({
     e.preventDefault();
     if (sending) return;
     setSubmitted(true);
-    setSendFailed(false);
+    setSendFailed(null);
 
     const first = fieldOrder.find((f) => errors[f]);
     if (first) {
@@ -165,11 +174,22 @@ export function RegisterForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(toPayload(values, tariff, requestId.current)),
       });
-      if (!response.ok) throw new Error(String(response.status));
+      if (!response.ok) {
+        const answer = (await response.json().catch(() => null)) as RefusalAnswer | null;
+        if (answer?.error === "rejected") {
+          const kind = answer.kind ?? "other";
+          setSendFailed({ kind, yandex: answer.yandex ?? null });
+          const field = FLEET_ERROR_FIELD[kind];
+          focusAfterSend.current = field ?? null;
+        } else {
+          setSendFailed({ kind: "network", yandex: null });
+        }
+        return;
+      }
       setDone(true);
       window.scrollTo({ top: 0 });
     } catch {
-      setSendFailed(true);
+      setSendFailed({ kind: "network", yandex: null });
     } finally {
       setSending(false);
     }
@@ -340,12 +360,19 @@ export function RegisterForm({
           <ErrorText field="consent" error={errorFor("consent")} />
 
           {sendFailed && (
-            <p role="alert" className="mt-4 rounded-2xl bg-danger-soft p-4 text-sm text-danger">
-              {t.sendError}{" "}
-              <a href={site.whatsapp.href} target="_blank" rel="noopener" className="font-semibold underline">
+            <div role="alert" className="mt-4 rounded-2xl bg-danger-soft p-4 text-sm text-danger">
+              <p className="font-semibold">{sendFailed.kind === "network" ? t.sendError : t.yandexErrors[sendFailed.kind]}</p>
+              {sendFailed.yandex?.message && (
+                <p className="mt-2 break-words text-xs opacity-80">
+                  {t.yandexReply}: {sendFailed.yandex.message}
+                  {sendFailed.yandex.code && ` (${sendFailed.yandex.code})`}
+                </p>
+              )}
+              {sendFailed.kind !== "network" && <p className="mt-2">{t.savedWithUs}</p>}
+              <a href={site.whatsapp.href} target="_blank" rel="noopener" className="mt-2 inline-block font-semibold underline">
                 {t.messageManager}
               </a>
-            </p>
+            </div>
           )}
 
           <button
@@ -363,3 +390,6 @@ export function RegisterForm({
     </form>
   );
 }
+
+type SendFailure = { kind: FleetErrorKind | "network"; yandex: { code: string; message: string } | null };
+type RefusalAnswer = { error?: string; kind?: FleetErrorKind; yandex?: { code: string; message: string } | null };

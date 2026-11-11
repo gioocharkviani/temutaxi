@@ -8,7 +8,8 @@ import { fill } from "@/i18n/fill";
 import { getRatingText } from "@/lib/rating/content";
 import { getPublicTop, getRatingSettings } from "@/lib/rating/service";
 import { Icon } from "../Icon";
-import { formatUpdated, periodLabel } from "../rating/period-label";
+import { Countdown } from "../rating/Countdown";
+import { countdownRange, formatUpdated, periodLabel } from "../rating/period-label";
 import { RatingList, RatingListSkeleton } from "../rating/RatingList";
 
 /**
@@ -25,6 +26,7 @@ export async function Rating({ t, lang }: { t: Dictionary["rating"]; lang: Local
 
   const text = getRatingText(settings, lang);
   const showDrivers = settings.landingCount > 0;
+  const countdown = countdownRange(settings);
 
   return (
     <section id="rating" aria-labelledby="rating-title" className="relative overflow-hidden bg-dark text-surface">
@@ -46,6 +48,8 @@ export async function Rating({ t, lang }: { t: Dictionary["rating"]; lang: Local
               <p className="rounded-xl bg-dark-2 px-4 py-2.5 text-on-dark-muted">{fill(t.updated, { time: formatUpdated(settings.lastSyncAt, lang) })}</p>
             )}
           </div>
+
+          {countdown && <Countdown from={countdown.from} to={countdown.to} t={t.countdown} className="mt-6" />}
 
           <div className="mt-7 flex flex-wrap gap-3">
             <Link

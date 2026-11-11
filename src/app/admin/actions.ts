@@ -17,6 +17,7 @@ import { SEO_PAGE_KEYS, seoSchema } from "@/lib/seo-schema";
 import { runCarListUpdate, runRatingSync, runRatingSyncIfDue, startJob } from "@/lib/jobs";
 import { deleteRegistration } from "@/lib/registrations";
 import { getRatingSettings, saveRatingSettings } from "@/lib/rating/service";
+import { deleteArchivedPeriod } from "@/lib/rating/archive";
 import { privacySchema, ratingSettingsSchema, type SettingsErrors } from "@/lib/rating/settings-schema";
 
 // Every admin page, including the one the form was sent from.
@@ -286,4 +287,12 @@ export async function changePasswordAction(_: PasswordState, form: FormData): Pr
   if (next !== text(form, "repeat")) return { error: "ახალი პაროლები ერთმანეთს არ ემთხვევა." };
   if (!(await changePassword(admin, text(form, "current"), next))) return { error: "მიმდინარე პაროლი არასწორია." };
   return { saved: true };
+}
+
+export async function deleteArchivedPeriodAction(form: FormData) {
+  await requireAdmin();
+  const id = Number(text(form, "id"));
+  if (Number.isInteger(id) && id > 0) await deleteArchivedPeriod(id);
+  revalidateAdmin();
+  redirect("/admin/rating#archive");
 }

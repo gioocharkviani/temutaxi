@@ -23,3 +23,10 @@ export function periodLabel(settings: RatingSettings, rollingText: PluralForms, 
   // A fixed period's `to` is the start of the following day.
   return `${format(from)} — ${format(new Date(to.getTime() - 1))}`;
 }
+
+/** The dates a countdown needs, or null when the period has no end (the last N days). */
+export function countdownRange(settings: RatingSettings) {
+  if (settings.periodMode !== "fixed" || !settings.periodStart || !settings.periodEnd) return null;
+  const { from, to } = getPeriodRange(settings);
+  return { from: from.toISOString(), to: to.toISOString() };
+}

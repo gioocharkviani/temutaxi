@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
+import { archiveRange } from "@/components/admin/archive-format";
 import { JobAutoRefresh } from "@/components/admin/JobAutoRefresh";
 import { Block, formatTime, JOB_NAMES, JobCard, JobsTable, PageLoading, PageTitle } from "@/components/admin/parts";
 import { SettingsForm } from "@/components/admin/SettingsForm";
@@ -7,6 +9,7 @@ import { adminCard, secondaryButton } from "@/components/admin/styles";
 import type { RatingSettings } from "@/db/entities";
 import { requireAdmin } from "@/lib/admin/auth";
 import { getLastRatingJob, getRecentJobs } from "@/lib/jobs";
+import { getArchivedPeriods } from "@/lib/rating/archive";
 import { DEFAULT_RATING_CONTENT } from "@/lib/rating/content";
 import { displayName } from "@/lib/rating/names";
 import { nextScheduledTime } from "@/lib/rating/schedule";
@@ -72,6 +75,15 @@ async function Rating() {
       <Block title="მძღოლები პერიოდში" hint={`ნაჩვენებია მაქსიმუმ ${PREVIEW_LIMIT}. სრული სახელი მხოლოდ ადმინებს უჩანთ.`}>
         <DriverTable settings={settings} />
       </Block>
+
+      <div id="archive" className="scroll-mt-24">
+        <Block
+          title="დასრულებული პერიოდების შედეგები"
+          hint="ფიქსირებული პერიოდის დასრულებისას ბოლო განახლება საბოლოო ცხრილს ბაზაში ინახავს, ერთხელ. ბოლო N დღის რეჟიმს დასასრული არ აქვს და აქ არ ინახება."
+        >
+          <ArchiveTable />
+        </Block>
+      </div>
 
       <Block title="განახლებების ისტორია" hint="ბოლო 12 გაშვება.">
         <JobsTable jobs={jobs} />
@@ -175,6 +187,41 @@ async function DriverTable({ settings }: { settings: RatingSettings }) {
           </tbody>
         </table>
       )}
+    </div>
+  );
+}
+
+async function ArchiveTable() {
+  const periods = await getArchivedPeriods();
+  if (periods.length === 0) {
+    return <p className={`${adminCard} text-sm text-muted`}>ჯერ არც ერთი ფიქსირებული პერიოდი არ დასრულებულა.</p>;
+  }
+  return (
+    <div className={`${adminCard} overflow-x-auto`}>
+      <table className="w-full min-w-[560px] text-left text-sm">
+        <thead className="text-xs text-muted">
+          <tr>
+            <th className="pb-2 font-medium">პერიოდი</th>
+            <th className="pb-2 font-medium">მძღოლი</th>
+            <th className="pb-2 font-medium">შეკვეთა</th>
+            <th className="pb-2 font-medium">შენახულია</th>
+            <th className="pb-2" />
+          </tr>
+        </thead>
+        <tbody>
+          {periods.map((p) => (
+            <tr key={p.id} className="border-t border-line-soft">
+              <td className="py-2.5 font-semibold">{archiveRange(p.periodFrom, p.periodTo)}</td>
+              <td className="py-2.5 tabular-nums">{p.drivers}</td>
+              <td className="py-2.5 tabular-nums">{p.totalOrders}</td>
+              <td className="py-2.5 text-xs">{formatTime(p.savedAt)}</td>
+              <td className="py-2.5 text-right">
+                <Link href={`/admin/rating/archive/${p.id}`} className={secondaryButton}>ნახვა</Link>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

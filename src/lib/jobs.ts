@@ -7,6 +7,7 @@ import { JobRunEntity, RatingDriverEntity, RatingSettingsEntity, type JobRun, ty
 import { AUTO_LIST_CITIES, fetchAutoList } from "./auto-list";
 import { saveCarLists } from "./auto-list-store";
 import { FleetApiError, listCompletedOrders, listDriverPhones } from "./fleet";
+import { isFinalDownload, saveFinalResults } from "./rating/archive";
 import { getPeriodRange } from "./rating/period";
 import { phoneKey } from "./rating/ranking";
 import { isSyncDue, periodKey } from "./rating/schedule";
@@ -118,6 +119,7 @@ export async function runRatingSync(jobId: number) {
     }
 
     const db = await getDb();
+    let archived: number | null = null;
     await db.transaction(async (manager) => {
       const repo = manager.getRepository(RatingDriverEntity);
       await repo.clear();
@@ -129,9 +131,12 @@ export async function runRatingSync(jobId: number) {
         syncFrom: range.from,
         syncTo: to,
       });
+      // After a fixed period ends, this download is complete: its final standings go to the archive once.
+      if (isFinalDownload(settings, range.to, to)) archived = await saveFinalResults(manager, settings, range, list);
     });
+    const archiveNote = archived === null ? "" : ` · პერიოდი დასრულდა: საბოლოო შედეგები შეინახა (${archived} მძღოლი)`;
 
-    await finishJob(jobId, { status: "success", items: rows.size, message: `დამუშავდა ${seen.size} შეკვეთა${phoneNote}` });
+    await finishJob(jobId, { status: "success", items: rows.size, message: `დამუშავდა ${seen.size} შეკვეთა${phoneNote}${archiveNote}` });
     await db.getRepository(JobRunEntity).delete({ type: "rating_sync", startedAt: LessThan(new Date(Date.now() - KEEP_RATING_JOBS_MS)) });
   } catch (error) {
     console.error("Rating update failed", error);

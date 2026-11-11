@@ -1,6 +1,7 @@
 // When the stored rating should be updated. No database or network here.
 
 import type { RatingSettings } from "@/db/entities";
+import { getPeriodRange } from "./period";
 
 const HOUR_MS = 60 * 60 * 1000;
 const DAY_MS = 24 * HOUR_MS;
@@ -26,11 +27,16 @@ export function nextScheduledTime(schedule: RatingSettings["syncSchedule"], now:
   return new Date(lastScheduledTime(schedule, now).getTime() + (schedule === "hourly" ? HOUR_MS : DAY_MS));
 }
 
-type DueSettings = PeriodSettings & Pick<RatingSettings, "enabled" | "syncSchedule" | "lastSyncAt" | "syncPeriodKey">;
+type DueSettings = PeriodSettings & Pick<RatingSettings, "enabled" | "syncSchedule" | "lastSyncAt" | "syncPeriodKey" | "syncTo">;
 
 export function isSyncDue(settings: DueSettings, lastJob: { status: string; startedAt: Date } | null, now: Date) {
   if (!settings.enabled) return false;
   if (lastJob?.status === "failed" && now.getTime() - lastJob.startedAt.getTime() < RETRY_AFTER_FAILURE_MS) return false;
   if (settings.syncPeriodKey !== periodKey(settings) || !settings.lastSyncAt) return true;
+  // A fixed period has just ended: count it to the end right away, so the final results are saved without waiting for the schedule.
+  if (settings.periodMode === "fixed") {
+    const end = getPeriodRange(settings, now).to;
+    if (end <= now && (!settings.syncTo || settings.syncTo < end)) return true;
+  }
   return settings.lastSyncAt < lastScheduledTime(settings.syncSchedule, now);
 }

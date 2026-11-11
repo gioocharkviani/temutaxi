@@ -111,6 +111,62 @@ export const RatingDriverEntity = new EntitySchema<RatingDriver>({
   },
 });
 
+/** A finished leaderboard period, saved once when its end has passed. */
+export interface LeaderboardPeriod {
+  id: number;
+  periodKey: string;
+  periodFrom: Date;
+  periodTo: Date;
+  /** The rules the results were counted with: tariffs, minimum orders, tie rule and prizes. */
+  rules: { categories: string[]; minOrders: number; tieBreak: TieBreak; prizes: number[] };
+  drivers: number;
+  totalOrders: number;
+  savedAt: Date;
+}
+
+export const LeaderboardPeriodEntity = new EntitySchema<LeaderboardPeriod>({
+  name: "LeaderboardPeriod",
+  tableName: "leaderboard_periods",
+  columns: {
+    id: { type: "int", primary: true, generated: "increment" },
+    periodKey: { name: "period_key", type: "varchar", length: 64, unique: true },
+    periodFrom: { name: "period_from", type: "datetime" },
+    periodTo: { name: "period_to", type: "datetime" },
+    rules: { type: "json" },
+    drivers: { type: "int" },
+    totalOrders: { name: "total_orders", type: "int" },
+    savedAt: { name: "saved_at", type: "datetime" },
+  },
+});
+
+/** One driver's final place in a finished period. Hidden drivers are left out. */
+export interface LeaderboardResult {
+  id: number;
+  periodId: number;
+  position: number;
+  driverId: string;
+  driverName: string;
+  orders: number;
+  lastOrderAt: Date;
+  prize: number | null;
+}
+
+export const LeaderboardResultEntity = new EntitySchema<LeaderboardResult>({
+  name: "LeaderboardResult",
+  tableName: "leaderboard_results",
+  columns: {
+    id: { type: "int", primary: true, generated: "increment" },
+    periodId: { name: "period_id", type: "int" },
+    position: { type: "int" },
+    driverId: { name: "driver_id", type: "varchar", length: 100 },
+    driverName: { name: "driver_name", type: "varchar", length: 255 },
+    orders: { type: "int" },
+    lastOrderAt: { name: "last_order_at", type: "datetime" },
+    prize: { type: "int", nullable: true },
+  },
+  indices: [{ name: "idx_leaderboard_results_period", columns: ["periodId", "position"] }],
+});
+
 export type JobType = "rating_sync" | "car_list_update";
 export type JobStatus = "running" | "success" | "failed";
 

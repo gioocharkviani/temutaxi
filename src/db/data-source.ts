@@ -5,6 +5,8 @@ import {
   AdminUserEntity,
   CarListEntryEntity,
   JobRunEntity,
+  LeaderboardPeriodEntity,
+  LeaderboardResultEntity,
   PromotionEntity,
   RatingDriverEntity,
   RatingSettingsEntity,
@@ -20,6 +22,7 @@ import { LeaderboardAndPhones1762900000000 } from "./migrations/1762900000000-Le
 import { Promotions1763000000000 } from "./migrations/1763000000000-Promotions";
 import { PromotionStoreButtons1763100000000 } from "./migrations/1763100000000-PromotionStoreButtons";
 import { ReferralsAndMail1763200000000 } from "./migrations/1763200000000-ReferralsAndMail";
+import { LeaderboardResults1763300000000 } from "./migrations/1763300000000-LeaderboardResults";
 
 function createDataSource() {
   return new DataSource({
@@ -34,6 +37,8 @@ function createDataSource() {
       JobRunEntity,
       PromotionEntity,
       RatingDriverEntity,
+      LeaderboardPeriodEntity,
+      LeaderboardResultEntity,
       CarListEntryEntity,
       AdminUserEntity,
       AdminSessionEntity,
@@ -50,6 +55,7 @@ function createDataSource() {
       Promotions1763000000000,
       PromotionStoreButtons1763100000000,
       ReferralsAndMail1763200000000,
+      LeaderboardResults1763300000000,
     ],
   });
 }

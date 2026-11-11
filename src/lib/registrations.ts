@@ -13,7 +13,9 @@ export async function saveRegistration(v: RegistrationValues, tariff: string, re
   const db = await getDb();
   const repo = db.getRepository(RegistrationEntity);
   const existing = await repo.findOneBy({ requestId });
-  if (existing?.status === "sent") return { id: existing.id, alreadySent: true };
+  if (existing?.status === "sent") return { id: existing.id, alreadySent: true, refusedBefore: false };
+  // Yandex refused the earlier try (a 4xx answer), so nothing was created there and a corrected retry is a new request.
+  const refusedBefore = existing?.status === "failed" && /^4\d\d\b/.test(existing.error ?? "");
 
   const fields = {
     requestId,
@@ -37,10 +39,10 @@ export async function saveRegistration(v: RegistrationValues, tariff: string, re
 
   if (existing) {
     await repo.update(existing.id, fields);
-    return { id: existing.id, alreadySent: false };
+    return { id: existing.id, alreadySent: false, refusedBefore };
   }
   const { identifiers } = await repo.insert(fields);
-  return { id: identifiers[0].id as number, alreadySent: false };
+  return { id: identifiers[0].id as number, alreadySent: false, refusedBefore: false };
 }
 
 export async function markRegistrationSent(id: number, fleetProfileId: string) {
