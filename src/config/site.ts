@@ -1,8 +1,8 @@
 export const site = {
   name: "TemuTaxi",
   domain: "temutaxi.ge",
-  phone: { display: "500 000 000", href: "tel:+995 598 16 07 16" },
-  whatsapp: { display: "500 000 001", href: "https://wa.me/995598160716" },
+  phone: { display: "598 16 07 16", href: "tel:+995 598 16 07 16" },
+  whatsapp: { display: "598 16 07 16", href: "https://wa.me/995598160716" },
   email: "info@temutaxi.ge",
   company: {
     name: "LLC ბასტეტ",
