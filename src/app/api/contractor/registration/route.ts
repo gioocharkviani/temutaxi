@@ -4,8 +4,15 @@ import { sendRegistrationEmail } from "@/lib/mail";
 import { createDriverProfile } from "@/lib/fleet";
 import { classifyFleetError, showsYandexText } from "@/lib/fleet-errors";
 import { effectiveTariff, getTariffState } from "@/lib/registration";
-import { parseRegistration, validateRegistration } from "@/lib/registration-schema";
-import { markRegistrationFailed, markRegistrationSent, saveRegistration } from "@/lib/registrations";
+import {
+  parseRegistration,
+  validateRegistration,
+} from "@/lib/registration-schema";
+import {
+  markRegistrationFailed,
+  markRegistrationSent,
+  saveRegistration,
+} from "@/lib/registrations";
 
 /** The API accepts 16-64 printable ASCII characters. */
 const VALID_TOKEN = /^[\x20-\x7e]{16,64}$/;
@@ -31,7 +38,10 @@ export async function POST(request: Request) {
 
   // 3. Save it. The form keeps one id across retries, so a repeat cannot create a second driver.
   const requestId = (body as { requestId?: unknown }).requestId;
-  const token = typeof requestId === "string" && VALID_TOKEN.test(requestId) ? requestId : crypto.randomUUID();
+  const token =
+    typeof requestId === "string" && VALID_TOKEN.test(requestId)
+      ? requestId
+      : crypto.randomUUID();
   const tariff = effectiveTariff(values, getTariffState(values, cars));
 
   const saved = await saveRegistration(values, tariff, token).catch((error) => {
@@ -43,7 +53,9 @@ export async function POST(request: Request) {
 
   // 4. Create the driver in Yandex.
   // A retry after Yandex refused the application gets a fresh token, or Yandex could repeat its old answer.
-  const yandexToken = saved.refusedBefore ? `${token.slice(0, 40)}-${Date.now().toString(36)}` : token;
+  const yandexToken = saved.refusedBefore
+    ? `${token.slice(0, 40)}-${Date.now().toString(36)}`
+    : token;
   const result = await createDriverProfile(values, tariff, yandexToken);
   // Admins hear about every application, also the ones Yandex refused.
   after(() => sendRegistrationEmail(saved.id));
@@ -54,12 +66,20 @@ export async function POST(request: Request) {
         {
           error: "rejected",
           kind: classifyFleetError(result.status, result.code, result.message),
-          yandex: showsYandexText(result.status) ? { code: result.code.slice(0, 100), message: result.message.slice(0, 300) } : null,
+          yandex: showsYandexText(result.status)
+            ? {
+                code: result.code.slice(0, 100),
+                message: result.message.slice(0, 300),
+              }
+            : null,
         },
         { status: STATUS.rejected },
       );
     }
-    return Response.json({ error: result.reason }, { status: STATUS[result.reason] });
+    return Response.json(
+      { error: result.reason },
+      { status: STATUS[result.reason] },
+    );
   }
   await markRegistrationSent(saved.id, result.id);
   return Response.json({ ok: true });

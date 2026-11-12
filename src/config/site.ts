@@ -1,19 +1,19 @@
 export const site = {
   name: "TemuTaxi",
   domain: "temutaxi.ge",
-  phone: { display: "500 000 000", href: "tel:+995500000000" },
-  whatsapp: { display: "500 000 001", href: "https://wa.me/995500000001" },
-  email: "info@example.com",
+  phone: { display: "500 000 000", href: "tel:+995 598 16 07 16" },
+  whatsapp: { display: "500 000 001", href: "https://wa.me/995598160716" },
+  email: "info@temutaxi.ge",
   company: {
     name: "Company LLC",
     id: "000000000",
-    address: "1 Example Street, Tbilisi, Georgia",
+    address: "41 David Guramishvili Ave, Tbilisi 0178, Georgia",
   },
   copyrightYear: 2026,
   services: ["Yandex Taxi", "Yandex Go", "Yandex Pro"],
-  /** Yandex Pro, the app drivers work in (formerly Taximeter). */
   yandexPro: {
     ios: "https://apps.apple.com/app/yandex-pro/id1496904594",
-    android: "https://play.google.com/store/apps/details?id=ru.yandex.taximeter",
+    android:
+      "https://play.google.com/store/apps/details?id=ru.yandex.taximeter",
   },
 } as const;
