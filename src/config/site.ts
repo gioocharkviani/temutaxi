@@ -5,8 +5,8 @@ export const site = {
   whatsapp: { display: "500 000 001", href: "https://wa.me/995598160716" },
   email: "info@temutaxi.ge",
   company: {
-    name: "Company LLC",
-    id: "000000000",
+    name: "LLC ბასტეტ",
+    id: "406571516",
     address: "41 David Guramishvili Ave, Tbilisi 0178, Georgia",
   },
   copyrightYear: 2026,
